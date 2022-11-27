@@ -13,7 +13,7 @@ public class Email {
     private List<String> receivers;
     private String subject;
     private String text;
-
+    private long id;
     private Email() {}
 
     /**
@@ -26,7 +26,8 @@ public class Email {
      */
 
 
-    public Email(String sender, List<String> receivers, String subject, String text) {
+    public Email(long id,String sender, List<String> receivers, String subject, String text) {
+        this.id=id;
         this.sender = sender;
         this.subject = subject;
         this.text = text;

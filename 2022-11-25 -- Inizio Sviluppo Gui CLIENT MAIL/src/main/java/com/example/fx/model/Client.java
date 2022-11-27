@@ -21,6 +21,7 @@ public class Client {
     private final ObservableList<Email> inboxContent;
     private final StringProperty emailAddress;
 
+    public long idEmail;
     /**
      * Costruttore della classe.
      *
@@ -78,7 +79,7 @@ public class Client {
         };
         Random r = new Random();
         for (int i=0; i<n; i++) {
-            Email email = new Email(
+            Email email = new Email(idEmail,
                     people[r.nextInt(people.length)],
                     List.of(people[r.nextInt(people.length)]),
                     subjects[r.nextInt(subjects.length)],
@@ -97,10 +98,11 @@ public class Client {
         Scanner emailReader = new Scanner(emails);
         while (emailReader.hasNextLine()) {
             String data = emailReader.nextLine();
-            String[] dataSplitten= data.split(";");
 
-            Email email = new Email(
-                   dataSplitten[0], Collections.singletonList(dataSplitten[1]),dataSplitten[2],dataSplitten[3]);
+            String[] dataSplitten= data.split(";");
+            long id=Long.parseLong(dataSplitten[0]);
+            Email email = new Email(id,
+                   dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
             System.out.println("EMAIL COMPOSED-->"+dataSplitten[3]+"++>"+email.getText());
             inboxContent.add(email);
 

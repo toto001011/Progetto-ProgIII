@@ -73,7 +73,7 @@ public class ClientController {
         lblUsername.textProperty().bind(model.emailAddressProperty());
         lblUsernameSend.textProperty().bind(model.emailAddressProperty());
 
-        emptyEmail = new Email("", List.of(""), "", "");
+        emptyEmail = new Email(-1,"", List.of(""), "", "");
 
         updateDetailView(emptyEmail);
     }
@@ -84,6 +84,7 @@ public class ClientController {
     @FXML
     protected void onDeleteButtonClick() {
         model.deleteEmail(selectedEmail);
+
         updateDetailView(emptyEmail);
     }
 
