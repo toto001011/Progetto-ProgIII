@@ -1,4 +1,5 @@
  package com.example.fx.ui;
+import com.example.fx.functions.functions;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -7,8 +8,10 @@ import javafx.scene.input.MouseEvent;
 import com.example.fx.model.Client;
 import com.example.fx.model.Email;
 import javafx.scene.layout.BorderPane;
-
+import com.example.fx.functions.functions;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -89,8 +92,15 @@ public class ClientController {
     }
 
     @FXML
-    protected void onSendButtonClick() {
-
+    protected void onSendButtonClick() throws IOException {
+        long id=20;
+        String sender="sender";
+        List<String> receivers=new ArrayList<String>();
+        receivers.add("dest");
+        String subject="soggetto";
+        String text="testo";
+        model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
+        //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
 
     }
 

@@ -8,8 +8,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -109,6 +109,23 @@ public class Client {
         }
 
         emailReader.close();
+    }
+
+
+    public void sendSocket(Email email) throws IOException {
+        Socket s =
+                new Socket("localhost", 8180);
+
+        PrintWriter
+                out = new PrintWriter(
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                s.getOutputStream())),
+                true);
+
+        out.println("PROVA INVIO");
+        out.flush();
+
     }
 
 
