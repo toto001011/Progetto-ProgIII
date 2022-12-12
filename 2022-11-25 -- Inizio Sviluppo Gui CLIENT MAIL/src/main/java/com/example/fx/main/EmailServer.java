@@ -19,7 +19,23 @@ import java.net.URL;
  all client input.
  */
 public class EmailServer extends Application {
+    public static void main(String[] args ) {
+        launch();
+     //   System.out.println("Finestra del server: ");
+        try {
+            int i = 1;
+            ServerSocket s = new ServerSocket(8180);
 
+            while (true) {
+                Socket incoming = s.accept(); // si mette in attesa di richiesta di connessione e la apre
+                System.out.println("Spawning " + i);
+                Runnable r = new ThreadedEchoHandler(incoming, i);
+                new Thread(r).start();//OSS. Nel progetto passo il runnable non direttamente al thread ma all'executor(precedentemente definito)
+                i++;
+            }
+        }
+        catch (IOException e) {e.printStackTrace();}
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
