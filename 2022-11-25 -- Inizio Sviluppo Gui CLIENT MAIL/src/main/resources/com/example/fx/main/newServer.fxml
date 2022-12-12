@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -22,6 +24,13 @@
       <HBox prefHeight="74.0" prefWidth="722.0" BorderPane.alignment="CENTER">
          <children>
             <Label prefHeight="38.0" prefWidth="135.0" text="        SERVER LOG" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane layoutX="145.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane layoutX="345.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button layoutX="82.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#onBtnActivate" prefHeight="26.0" prefWidth="104.0" text="ACTIVATE" AnchorPane.topAnchor="4.0" />
+               </children>
+            </AnchorPane>
          </children>
       </HBox>
    </top>

@@ -134,7 +134,7 @@ public class ClientController {
     protected void onSendButtonClick() throws IOException {
 
         Socket s =
-                new Socket("localhost", 8180);
+                new Socket("localhost", 8990);
 
         PrintWriter
                 out = new PrintWriter(

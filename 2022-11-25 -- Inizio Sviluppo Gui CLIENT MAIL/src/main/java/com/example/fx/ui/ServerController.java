@@ -1,33 +1,47 @@
 package com.example.fx.ui;
-import com.example.fx.functions.functions;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
-import com.example.fx.model.Client;
-import com.example.fx.model.Email;
-import javafx.scene.layout.BorderPane;
-import com.example.fx.functions.functions;
 
-import java.io.BufferedWriter;
+import javafx.scene.control.TextArea;
+
+import java.io.*;
+import java.util.*;
+
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 /**
  * Classe Controller
  */
 
-public class ServerController {
+public class ServerController implements Callable<Socket> {
 
+    private static final int NUM_THREAD = 3;
     @FXML
     private TextArea logArea;
 
 
+    @FXML
+    public void onBtnActivate() {
+       // activateServer();
+    }
+    @FXML
+    public void initialize() {
 
+        //  System.out.println("Finestra del server: ");
+
+    }
+
+
+
+    @Override
+    public Socket call() throws Exception {
+        return null;
+    }
 }
