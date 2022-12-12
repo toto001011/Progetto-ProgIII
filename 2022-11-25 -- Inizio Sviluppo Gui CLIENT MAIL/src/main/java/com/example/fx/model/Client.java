@@ -66,27 +66,6 @@ public class Client {
 
         //Email newEmail=new Email(email.getReceivers(),email.getSender(), )
     }
-    public void generateRandomEmails(int n) {
-        String[] people = new String[] {"Paolo", "Alessandro", "Enrico", "Giulia", "Gaia", "Simone"};
-        String[] subjects = new String[] {
-                "Importante", "A proposito della nostra ultima conversazione", "Tanto va la gatta al lardo",
-                "Non dimenticare...", "Domani scuola" };
-        String[] texts = new String[] {
-                "È necessario che ci parliamo di persona, per mail rischiamo sempre fraintendimenti",
-                "Ricordati di comprare il latte tornando a casa",
-                "L'appuntamento è per domani alle 9, ci vediamo al solito posto",
-                "Ho sempre pensato valesse 42, tu sai di cosa parlo"
-        };
-        Random r = new Random();
-        for (int i=0; i<n; i++) {
-            Email email = new Email(idEmail,
-                    people[r.nextInt(people.length)],
-                    List.of(people[r.nextInt(people.length)]),
-                    subjects[r.nextInt(subjects.length)],
-                    texts[r.nextInt(texts.length)]);
-            inboxContent.add(email);
-        }
-    }
 
 
     /**
@@ -97,19 +76,30 @@ public class Client {
         File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
         Scanner emailReader = new Scanner(emails);
         while (emailReader.hasNextLine()) {
+
             String data = emailReader.nextLine();
 
             String[] dataSplitten= data.split(";");
+
             long id=Long.parseLong(dataSplitten[0]);
             Email email = new Email(id,
                    dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
             System.out.println("EMAIL COMPOSED-->"+dataSplitten[3]+"++>"+email.getText());
             inboxContent.add(email);
-
         }
 
         emailReader.close();
     }
+    /**
+     *
+     * @param receivers
+     * @return rec
+     *
+     * Funzione che carica "individualmente i riceventi nwi socket e
+     * prende in input una lista di riceventi separati da virgola
+     * restituisce un ArrayList di riceventi
+     */
+
 
 
     public void sendSocket(Email email) throws IOException {

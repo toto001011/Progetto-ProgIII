@@ -1,7 +1,9 @@
 package com.example.fx.functions;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import com.example.fx.model.Email;
 public class functions {
@@ -81,6 +83,30 @@ public class functions {
         boolean successful = tempEmails.renameTo(emails);
         System.out.println("RENAMED");
 
+
+    }
+
+    /**
+     *
+     * @param receivers
+     * @return rec
+     *
+     * Funzione che carica "individualmente i riceventi nwi socket e
+     * prende in input una lista di riceventi separati da virgola
+     * restituisce un ArrayList di riceventi
+     */
+    public static List<String> loadReceiver(String receivers){
+
+        ArrayList<String> rec= new ArrayList<>();
+
+        String[] rvalue = receivers.split(",");
+
+        for (String rsplit : rvalue) {
+            rec.add(rsplit);
+
+        }
+        System.out.println(rec);
+        return rec;
 
     }
 

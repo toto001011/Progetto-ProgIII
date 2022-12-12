@@ -53,8 +53,15 @@ public class Email {
     /**
      * @return      stringa composta dagli indirizzi e-mail del mittente più destinatari
      */
-    @Override
+   /* @Override
     public String toString() {
         return String.join(" - ", List.of(this.sender,this.subject));
+    }*/
+
+    public String toString() {
+        return String.join(" - ", List.of(this.sender,this.subject));
+
+        //return String.join(" - ", List.of(this.sender,this.subject,this.text));
+        //return ""+this.id+" - "+this.sender+" - "+receivers.get(0)+" - "+this.subject+" - "+this.text;
     }
 }

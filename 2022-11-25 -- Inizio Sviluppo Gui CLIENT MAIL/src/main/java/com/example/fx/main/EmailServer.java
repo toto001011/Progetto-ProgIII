@@ -7,27 +7,30 @@ package com.example.fx.main; /**
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
 /**
  This program implements a multithreaded server that listens to port 8189 and echoes back
  all client input.
  */
-public class EmailServer {
-    public static void main(String[] args ) {
-        System.out.println("Finestra del server: ");
-        try {
-            int i = 1;
-            ServerSocket s = new ServerSocket(8180);
+public class EmailServer extends Application {
 
-            while (true) {
-                Socket incoming = s.accept(); // si mette in attesa di richiesta di connessione e la apre
-                System.out.println("Spawning " + i);
-                Runnable r = new ThreadedEchoHandler(incoming, i);
-                new Thread(r).start();//OSS. Nel progetto passo il runnable non direttamente al thread ma all'executor(precedentemente definito)
-                i++;
-            }
-        }
-        catch (IOException e) {e.printStackTrace();}
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        //URL clientUrl = EmailClientMain.class.getResource("newServer.fxml");
+        URL clientUrl = EmailServer.class.getResource("newServer.fxml");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
+        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        stage.setTitle("Email server");
+        stage.setScene(scene);
+        stage.show();
     }
 }
 
@@ -44,11 +47,12 @@ class ThreadedEchoHandler implements Runnable {
      @param in the incoming socket
      @param c the counter for the handlers (used in prompts)
      */
-    public ThreadedEchoHandler(Socket in, int c) {
+
+
+      public ThreadedEchoHandler(Socket in, int c) {
         incoming = in;
         counter = c;
     }
-
     public void run() {
         try {
             try {
@@ -57,7 +61,7 @@ class ThreadedEchoHandler implements Runnable {
                 //ObjectOutputStream dOut=  dOut. incoming.getOutputStream();
 
                 Scanner in = new Scanner(inStream);
-                PrintWriter out = new PrintWriter(outStream, true /* autoFlush */);
+                PrintWriter out = new PrintWriter(outStream, true  /*AutoFlush */);
 
 
 

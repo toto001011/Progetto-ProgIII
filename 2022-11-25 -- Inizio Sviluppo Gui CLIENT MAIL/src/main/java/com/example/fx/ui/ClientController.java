@@ -9,7 +9,12 @@ import com.example.fx.model.Client;
 import com.example.fx.model.Email;
 import javafx.scene.layout.BorderPane;
 import com.example.fx.functions.functions;
+
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +41,9 @@ public class ClientController {
 
     @FXML
     private TextArea txtEmailContent;
+
+    @FXML
+    private TextArea txtEmailContentSend;
 
     @FXML
     private ListView<Email> lstEmails;
@@ -66,7 +74,7 @@ public class ClientController {
         //istanza nuovo client
         model = new Client("studente@unito.it");
         model.loadEmail();
-        //model.generateRandomEmails(10);
+      //  model.generateRandomEmails(10);
 
         selectedEmail = null;
 
@@ -91,15 +99,52 @@ public class ClientController {
         updateDetailView(emptyEmail);
     }
 
+    protected Email newMail(){
+        long id=20;
+        //String sender= String.valueOf(lblUsernameSend);//"sender";
+        String sender=lblUsernameSend.textProperty().getValue();
+
+        List<String> receivers=new ArrayList<String>();
+        receivers=loadReceiver(txtSendTo.textProperty().getValue());
+
+        String subject=txtSendObj.textProperty().getValue();
+
+        String text=txtEmailContentSend.textProperty().getValue();
+        //model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
+        Email emailsend = new Email(id, sender,  receivers,  subject,  text);
+        System.out.println("EMAIL CLIENT CONTROLLER-->"+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
+        return emailsend;
+    }
+    public static List<String> loadReceiver(String receivers){
+
+        ArrayList<String> rec= new ArrayList<>();
+        //System.out.println("RECeivers"+receivers);
+
+        String[] rvalue = receivers.split(",");
+
+        for (String rsplit : rvalue) {
+            rec.add(rsplit);
+
+        }
+      //  System.out.println("REC"+rec);
+        return rec;
+
+    }
     @FXML
     protected void onSendButtonClick() throws IOException {
-        long id=20;
-        String sender="sender";
-        List<String> receivers=new ArrayList<String>();
-        receivers.add("dest");
-        String subject="soggetto";
-        String text="testo";
-        model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
+
+        Socket s =
+                new Socket("localhost", 8180);
+
+        PrintWriter
+                out = new PrintWriter(
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                s.getOutputStream())),
+                true);
+
+        out.println(newMail());
+        out.flush();
         //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
 
     }
@@ -121,7 +166,8 @@ public class ClientController {
 
         pnlReadMessage.visibleProperty().set(false);
         pnlNewMessage.visibleProperty().set(true);
-        txtEmailContent.setText(null);
+        txtEmailContent.visibleProperty().set(false);
+        txtEmailContentSend.visibleProperty().set(true);
 
 
         //lblFrom.setText(String.valueOf(lblUsername));

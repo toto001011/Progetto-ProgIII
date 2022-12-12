@@ -77,12 +77,12 @@
                         </GridPane>
                      </top>
                      <center>
-                        <TextArea fx:id="txtEmailContent" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                        <TextArea fx:id="txtEmailContentSend" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                      </center>
                      <bottom>
                         <HBox prefHeight="32.0" prefWidth="453.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnDelete" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="31.0" prefWidth="90.0" text="Elimina" />
+                              <Button fx:id="btnDeleteSend" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="31.0" prefWidth="90.0" text="Elimina" />
                               <Button fx:id="btnSend" mnemonicParsing="false" onMouseClicked="#onSendButtonClick" prefHeight="31.0" prefWidth="90.0" text="Send" />
                            </children>
                         </HBox>
