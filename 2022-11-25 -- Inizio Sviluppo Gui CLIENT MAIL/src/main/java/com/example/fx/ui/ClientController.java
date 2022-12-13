@@ -135,7 +135,7 @@ public class ClientController {
 
         Socket s =
                 new Socket("localhost", 8990);
-
+        //definisco l'imput stream del socket client
         PrintWriter
                 out = new PrintWriter(
                 new BufferedWriter(
