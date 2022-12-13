@@ -10,9 +10,11 @@ import java.util.*;
 
 import com.example.fx.ui.ServerController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,10 +44,14 @@ public class EmailServer extends Application {
         URL clientUrl = EmailServer.class.getResource("newServer.fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
+
+
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
         stage.setTitle("Email server");
         stage.setScene(scene);
         stage.show();
+
+
     }
 
 
