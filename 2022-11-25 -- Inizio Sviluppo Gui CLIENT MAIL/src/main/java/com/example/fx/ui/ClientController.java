@@ -10,10 +10,7 @@ import com.example.fx.model.Email;
 import javafx.scene.layout.BorderPane;
 import com.example.fx.functions.functions;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +61,7 @@ public class ClientController {
     private Email selectedEmail;
     private Email emptyEmail;
 
-
+    private static final int SERVER_PORT = 8990;
 
 
     @FXML
@@ -134,16 +131,18 @@ public class ClientController {
     protected void onSendButtonClick() throws IOException {
 
         Socket s =
-                new Socket("localhost", 8990);
+                new Socket("localhost",SERVER_PORT );
         //definisco l'imput stream del socket client
-        PrintWriter
+       /* PrintWriter
                 out = new PrintWriter(
                 new BufferedWriter(
-                        new OutputStreamWriter(
+                        new ObjectOutputStream(
                                 s.getOutputStream())),
-                true);
+                true);*/
+        ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 
-        out.println(newMail());
+       // out.println(newMail());
+        out.writeObject(newMail());
         out.flush();
         //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
 

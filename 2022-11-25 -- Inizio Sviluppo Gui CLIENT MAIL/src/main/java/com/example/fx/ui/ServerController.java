@@ -1,5 +1,5 @@
 package com.example.fx.ui;
-import javafx.application.Platform;
+import com.example.fx.model.Email;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 
@@ -7,12 +7,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
 import java.util.*;
 
 import java.io.IOException;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
@@ -35,26 +33,22 @@ public class ServerController  {
     private BorderPane serverPane;
 
 
-    @FXML
-    public void onBtnActivate() throws IOException {
 
-    }
     @FXML
     public void initialize() throws IOException {
 
           System.out.println("Finestra del server: ");
 
+          /*
+            Creo un nuovo thread che ha il compito di essere sempre in attesa di accettare connessioni
+           */
         Task task = new Task<Void>() {
             @Override public Void call() throws IOException {
                 ServerSocket s = new ServerSocket(SERVER_PORT);
                 while (true) {
 
                     System.out.println("THREAD INITILIZE 1 ");
-
-
                     Socket income = s.accept();
-
-
                     initilizeServer(income);
                     System.out.println("THREAD INITILIZE 2");
                 }
@@ -76,9 +70,8 @@ public class ServerController  {
 
         ServerTasks incomeTask=new ServerTasks(income);
 
-        System.out.println("\n \nFinestra START \n \n");
-
         ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
+
         Vector<FutureTask<Socket>> tasks = new Vector<>();
 
 
@@ -97,50 +90,44 @@ public class ServerController  {
         public ServerTasks(Socket income){
             this.income=income;
         }
-        public Socket call() throws IOException {
+
+        /*
+        * Funzione Call() che viene chiamata dal vettore dei futureTask e specifica cosa fare
+        * */
+        public Socket call() throws IOException, ClassNotFoundException {
             int port;//porta alla quale si connette il socket
-            //public ServerTasks(int port){this.port=port;}
-            System.out.println("Finestra TASK ");
-           //Socket income= startServer(SERVER_PORT);
+           // System.out.println("Finestra TASK ");
 
 
 
-            InputStream inStream = income.getInputStream();
-
+            //InputStream inStream = income.getInputStream();
+            ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
                 Scanner in = new Scanner(inStream);
+            Email email = (Email) inStream.readObject();
 
-
-                System.out.println("INIZIO computazione ");
+                System.out.println("EMAIL "+ email.getText());
 
 
                 boolean done = false;
-                while (!done && in.hasNextLine()) {
-                    String outLine = in.nextLine();
-                    System.out.println("Soket value-->" + outLine);
 
-                    logArea.appendText("\n" + outLine +" invia mail");
-
-                }
             //income.close();
                 return income;
 
 
-            //logArea.appendText(income.);
 
 
         }
 
     }
-   /* @Override
-    public ServerSocket call() throws Exception {
 
-        System.out.println("INIZIO computazione " );
+    public boolean verifyEmail(String socketValue){
 
-            //to do thing
+        System.out.println(socketValue);
 
-        System.out.println("FINE computazione "  + ": risultato = " + 2 );
-        return new ServerSocket();
+        return false;
+
     }
 
-*/
+
+
 }
