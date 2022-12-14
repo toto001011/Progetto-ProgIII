@@ -96,6 +96,15 @@ public class ClientController {
         updateDetailView(emptyEmail);
     }
 
+    @FXML
+    protected void onbtUpdateViewlButtonClick(){
+
+            model.refreshEmail();
+            updateDetailView(emptyEmail);
+
+
+    }
+
     protected Email newMail(){
         long id=20;
         //String sender= String.valueOf(lblUsernameSend);//"sender";
@@ -133,12 +142,7 @@ public class ClientController {
         Socket s =
                 new Socket("localhost",SERVER_PORT );
         //definisco l'imput stream del socket client
-       /* PrintWriter
-                out = new PrintWriter(
-                new BufferedWriter(
-                        new ObjectOutputStream(
-                                s.getOutputStream())),
-                true);*/
+
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
 
        // out.println(newMail());
@@ -155,7 +159,7 @@ public class ClientController {
 
     @FXML
     protected void onReplyAllButtonClick() {
-        model.deleteEmail(selectedEmail);
+        //model.deleteEmail(selectedEmail);
         updateDetailView(emptyEmail);
     }
 
@@ -193,6 +197,9 @@ public class ClientController {
     protected void showSelectedEmail(MouseEvent mouseEvent) {
         pnlNewMessage.visibleProperty().set(false);
         pnlReadMessage.visibleProperty().set(true);
+
+        txtEmailContent.visibleProperty().set(true);
+        txtEmailContentSend.visibleProperty().set(false);
 
         Email email = lstEmails.getSelectionModel().getSelectedItem();
         selectedEmail = email;

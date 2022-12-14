@@ -1,4 +1,7 @@
-0;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il lattge scremato
-1;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il lattge scremato
-2;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il lattge scremato
-3;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il lattge scremato
+1;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il latte scremato;
+2;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il latte scremato;
+3;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il latte scremato;
+20;studente@unito.it;giuseppe@unito.it;TEST INVIO MAIL3;TEST INVIO MAIL3;
+20;studente@unito.it;giuseppe@uni.it;TEST INVIO MAIL3;TEST INVIO MAIL3;
+20;studente@unito.it;giuseppe@unito.edu.it;TEST INVIO MAIL3;TEST INVIO MAIL3;
+20;studente@unito.it;giuseppe@unipi.edu.it;TEST INVIO MAIL3;TEST INVIO MAIL3;

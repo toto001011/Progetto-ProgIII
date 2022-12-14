@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="722.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fx.ui.ClientController">
    <center>
@@ -33,11 +34,15 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <VBox minWidth="-Infinity" prefHeight="52.0" prefWidth="100.0">
                            <children>
-                              <Button fx:id="btnNewMail" mnemonicParsing="false" onMouseClicked="#onbtnNewMailButtonClick" prefHeight="31.0" prefWidth="90.0" text="New Mail" />
+                              <Button fx:id="btnNewMail" mnemonicParsing="false" onMouseClicked="#onbtnNewMailButtonClick" prefHeight="26.0" prefWidth="100.0" text="New Mail">
+                                 <VBox.margin>
+                                    <Insets bottom="6.0" />
+                                 </VBox.margin></Button>
+                              <Button mnemonicParsing="false" onMouseClicked="#onbtUpdateViewlButtonClick" prefHeight="26.0" prefWidth="103.0" text="Update View" />
                            </children>
-                        </HBox>
+                        </VBox>
                      </children>
                      <padding>
                         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />

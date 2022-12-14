@@ -79,7 +79,7 @@ public class functions {
         }
         emailReader.close();
         emailWriter.close();
-
+        emails.delete();
         boolean successful = tempEmails.renameTo(emails);
         System.out.println("RENAMED");
 
