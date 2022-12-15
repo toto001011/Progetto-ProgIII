@@ -1,5 +1,11 @@
  package com.example.fx.ui;
 import com.example.fx.functions.functions;
+import javafx.beans.Observable;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -11,7 +17,10 @@ import javafx.scene.layout.BorderPane;
 import com.example.fx.functions.functions;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,9 +69,16 @@ public class ClientController {
     private Client model;
     private Email selectedEmail;
     private Email emptyEmail;
+    private FloatProperty inboxDim;
+
+
+    //private  ObservableList<File> inboxCsv;
+
+
 
     private static final int SERVER_PORT = 8990;
 
+    private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
 
     @FXML
     public void initialize() throws IOException {
@@ -71,7 +87,7 @@ public class ClientController {
         //istanza nuovo client
         model = new Client("studente@unito.it");
         model.loadEmail();
-      //  model.generateRandomEmails(10);
+        //listenInbox();
 
         selectedEmail = null;
 
@@ -83,7 +99,16 @@ public class ClientController {
 
         emptyEmail = new Email(-1,"", List.of(""), "", "");
 
-        updateDetailView(emptyEmail);
+        inboxDim=model.amountDueProperty();
+
+        System.out.println("PROPERTIES-->"+inboxDim);
+        listenInbox();
+
+
+
+
+
+
     }
 
     /**
@@ -92,6 +117,12 @@ public class ClientController {
     @FXML
     protected void onDeleteButtonClick() {
         model.deleteEmail(selectedEmail);
+        try {
+            inboxDim.setValue(Files.size(emails.toPath()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("PROPERTIES-->"+inboxDim);
 
         updateDetailView(emptyEmail);
     }
@@ -101,7 +132,6 @@ public class ClientController {
 
             model.refreshEmail();
             updateDetailView(emptyEmail);
-
 
     }
 
@@ -119,6 +149,7 @@ public class ClientController {
         //model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
         Email emailsend = new Email(id, sender,  receivers,  subject,  text);
         System.out.println("EMAIL CLIENT CONTROLLER-->"+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
+
         return emailsend;
     }
     public static List<String> loadReceiver(String receivers){
@@ -149,7 +180,8 @@ public class ClientController {
         out.writeObject(newMail());
         out.flush();
         //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
-
+       inboxDim.setValue(Files.size(emails.toPath()));
+        System.out.println("PROPERTIES-->"+inboxDim);
     }
 
     @FXML
@@ -188,7 +220,16 @@ public class ClientController {
         updateDetailView(emptyEmail);
     }
 
+public void listenInbox(){
+        inboxDim.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                System.out.println("NEW MESSAGES"+t1);
+                model.refreshEmail();
+            }
+        });
 
+}
 
 
     /**

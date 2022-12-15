@@ -58,10 +58,10 @@ public class ServerController  {
 
             }
         };
-
-
-
         new Thread(task).start();
+
+
+
 
 
     }
@@ -115,9 +115,11 @@ public class ServerController  {
                 if(verifyEmail(email.getReceivers())) {
                     /*Mail CORRETTA pronta per l'invio*/
                     model=email;
+                    logArea.appendText(email.getSender() + " Invia Mail\n");
                     model.sendMailToInbox(email);
 
-                    logArea.appendText(email.getSender() + " Invia Mail\n");
+
+
                 }else{
                     logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
                 }

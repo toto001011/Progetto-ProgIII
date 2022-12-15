@@ -13,6 +13,7 @@ public class EmailClientMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+
         URL clientUrl = EmailClientMain.class.getResource("newMail.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);

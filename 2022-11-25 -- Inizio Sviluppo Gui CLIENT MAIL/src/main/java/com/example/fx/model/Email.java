@@ -58,24 +58,21 @@ public class Email implements Serializable {
     }
 
 
+
+
+
     public void sendMailToInbox(Email email) throws IOException {
-       // File emails= open File("");
-        //String textToAppend = "Happy Learning !!";
+
         String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt";
 
         try(FileWriter fw = new FileWriter(filePath, true);
             BufferedWriter emailWriter = new BufferedWriter(fw);) {
 
-
-
-
-//        BufferedWriter emailWriter=new BufferedWriter(new FileWriter(emails));
-
-
             System.out.println("ID:" + id+" TO:"+email.receivers);
 
             emailWriter.append(email.getId()+";"+email.getSender()+";"+email.receivers.get(0)+";"+email.getSubject()+";"+email.getText()+";\n");
            // emailWriter.newLine();
+
 
         }
 

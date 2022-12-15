@@ -1,15 +1,12 @@
 package com.example.fx.model;
 
-import com.example.fx.main.EmailClientMain;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -17,11 +14,18 @@ import java.util.*;
  */
 
 public class Client {
+
     private final ListProperty<Email> inbox;
+
+
     private final ObservableList<Email> inboxContent;
+    //private ObservableP CvsDim;
     private final StringProperty emailAddress;
 
-   // public long idEmail;
+    private final FloatProperty inboxDim;
+   private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+
+    // public long idEmail;
     /**
      * Costruttore della classe.
      *
@@ -34,7 +38,25 @@ public class Client {
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
+
+        this.inboxDim=new SimpleFloatProperty();
+        try {
+            inboxDim.setValue(Files.size(emails.toPath()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Creo e setto la Observable list del file
+        /*this.inboxCsvDim= new Long(2); //new LFXCollections.observableList(new ArrayList<>());
+        this.inboxCsvDim= new ObservableLongValue() {};
+        this.Cvs=new SimpleListProperty<>();
+        this.Cvs.set(inboxCsv);*/
+
+
+
     }
+
+
 
     /**
      * @return      lista di email
@@ -53,6 +75,15 @@ public class Client {
         return emailAddress;
     }
 
+    public FloatProperty amountDueProperty() {
+        //inboxDim.setValue(20);
+        try {
+            inboxDim.set(Files.size(emails.toPath()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return inboxDim;
+    }
     /**
      *
      * @return   elimina l'email specificata
@@ -82,6 +113,7 @@ public class Client {
 
     public  void loadEmail() throws IOException {
         File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+        //inboxCsv.add(emails);
         Scanner emailReader = new Scanner(emails);
         while (emailReader.hasNextLine()) {
 
@@ -93,14 +125,39 @@ public class Client {
             System.out.println("DATA"+dataSplitten[4]+" "+emailReader.hasNextLine());
             Email email = new Email(id,
                     dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
-            System.out.println("EMAIL COMPOSED-->"+dataSplitten[3]+"++>"+email.getText());
+           // System.out.println("EMAIL COMPOSED-->"+dataSplitten[3]+"++>"+email.getText());
             inboxContent.add(email);
+
         }
         System.out.println(emailReader.hasNextLine());
-
         emailReader.close();
     }
 
+/*
+    public void listenInbox(){
+
+        //Create two simple observable integers.
+
+       // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+
+        SimpleLongProperty smartVar = new SimpleLongProperty();
+
+        smartVar.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                System.out.println("CHANGED TO "+newValue);
+                inboxContent.clear();
+
+            }
+        });
+        while (true) {
+            try {
+                smartVar.set(Files.size(emails.toPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }*/
     public  void refreshEmail(){
         inboxContent.clear();
         try {
@@ -114,6 +171,7 @@ public class Client {
 
 
 
+
     /**
      * Cancella la mail dal file csv Ricopiando quelle che devono rimanere in un altro file temporaneo che poi
      * viene rinominato in quello originale
@@ -121,7 +179,6 @@ public class Client {
      *
      */
     public static void deleteMail(long idMail)throws IOException{
-        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
         File tempEmails = new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/Tempemails.txt");
 
         BufferedReader emailReader = new BufferedReader(new FileReader(emails));
@@ -152,6 +209,8 @@ public class Client {
         emailWriter.close();
         emails.delete();
         boolean successful = tempEmails.renameTo(emails);
+        //emails=tempEmails;//per permettere al listener di avviso ricezione mail che il file "è cambiato"
+
         System.out.println("RENAMED");
 
 
