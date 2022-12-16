@@ -70,9 +70,10 @@ public class ClientController {
     private Email selectedEmail;
     private Email emptyEmail;
     private FloatProperty inboxDim;
-
+    private Client client;
 
     //private  ObservableList<File> inboxCsv;
+
 
 
 
@@ -81,16 +82,17 @@ public class ClientController {
     private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize(Client client) throws IOException {
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
         //istanza nuovo client
-        model = new Client("studente@unito.it");
+        model = client;//new Client("email");
+      //  model=client;
         model.loadEmail();
         //listenInbox();
 
         selectedEmail = null;
-
+        System.out.println("LIST EMAIL"+lstEmails);
         //binding tra lstEmails e inboxProperty
         lstEmails.itemsProperty().bind(model.inboxProperty());
         lstEmails.setOnMouseClicked(this::showSelectedEmail);

@@ -1,3 +1,6 @@
 1;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il latte scremato;
 2;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il latte scremato;
 3;salvatoreindino@gmail.com;giulio@hotmail.com;SOGGETTTO;Prendi il latte scremato;
+20;salvatoreindino@gmail.it;fbda@l.it;sfdd;advsasdfva;
+20;q@edu.it;a@edu.it;Object;Testo priova invio;
+20;q@edu.it;a@edu.it;Object;Testo priova invio;
