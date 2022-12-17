@@ -8,8 +8,11 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
@@ -48,12 +51,16 @@ public class ServerController  {
         Task task = new Task<Void>() {
             @Override public Void call() throws IOException {
                 ServerSocket s = new ServerSocket(SERVER_PORT);
+                ArrayList<Socket> incomes=new ArrayList<>();
+                int i=0;
                 while (true) {
 
-                    System.out.println("THREAD INITILIZE 1 ");
-                    Socket income = s.accept();
-                    initilizeServer(income);
-                    System.out.println("THREAD INITILIZE 2");
+                    System.out.println("THREAD INITIALIZE -- I:"+i);
+                     incomes.add(s.accept());
+                    initilizeServer(incomes.get(i));
+                    System.out.println("INCOME SOCKET(I)"+incomes.get(i));
+                    i++;
+                    System.out.println("THREAD FINISH --I:"+i+"\n");
                 }
 
             }
@@ -85,6 +92,8 @@ public class ServerController  {
 
 
 
+
+
     }
 
 
@@ -108,15 +117,22 @@ public class ServerController  {
 
             //InputStream inStream = income.getInputStream();
             ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
-                Scanner in = new Scanner(inStream);
+            Scanner in = new Scanner(inStream);
+            //Outputstream per avvisare il client della mail che è stata ricevuta
+            ObjectOutputStream outStream = new ObjectOutputStream(income.getOutputStream());
+            PrintWriter out = new PrintWriter(String.valueOf(inStream));
+
             Email email = (Email) inStream.readObject();
 
                 //System.out.println("EMAIL "+ email.getText());
-                if(verifyEmail(email.getReceivers())) {
+                if(ExistEmail(email.getReceivers())) {
                     /*Mail CORRETTA pronta per l'invio*/
                     model=email;
-                    logArea.appendText(email.getSender() + " Invia Mail\n");
+                    logArea.appendText(email.getSender() + " Invia Mai a "+email.getReceivers()+"\n");
+
                     model.sendMailToInbox(email);
+
+                    outStream.writeObject(model);
 
 
 
@@ -137,11 +153,13 @@ public class ServerController  {
 
     }
 
-    public boolean verifyEmail(List<String> socketMailTo){
+
+
+    public boolean ExistEmail(List<String> socketMailTo){
         int i=0;
         boolean correct=true;
         while (i<socketMailTo.size() && correct){
-           // System.out.println(socketMailTo.get(i));
+            // System.out.println(socketMailTo.get(i));
             if(socketMailTo.get(i).lastIndexOf("@")==-1 || socketMailTo.get(i).lastIndexOf(".it")==-1){
                 correct=false;
             }
@@ -153,7 +171,6 @@ public class ServerController  {
         return correct;
 
     }
-
 
 
 }

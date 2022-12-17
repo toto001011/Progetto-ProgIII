@@ -55,7 +55,7 @@
             </BorderPane>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <BorderPane fx:id="pnlNewMessage" prefHeight="200.0" prefWidth="200.0" visible="true">
+                  <BorderPane fx:id="pnlNewMessage" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <top>
                         <GridPane fx:id="GridUsernameSend" BorderPane.alignment="CENTER">
                           <columnConstraints>
@@ -93,7 +93,7 @@
                         </HBox>
                      </bottom>
                   </BorderPane>
-                  <BorderPane fx:id="pnlReadMessage" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <BorderPane fx:id="pnlReadMessage" prefHeight="200.0" prefWidth="200.0">
                      <top>
                         <GridPane BorderPane.alignment="CENTER">
                            <columnConstraints>
@@ -127,6 +127,7 @@
                               <Button fx:id="btnDelete" mnemonicParsing="false" onMouseClicked="#onDeleteButtonClick" prefHeight="31.0" prefWidth="90.0" text="Elimina" />
                               <Button fx:id="btnReply" mnemonicParsing="false" onMouseClicked="#onReplyButtonClick" prefHeight="31.0" prefWidth="90.0" text="Reply" />
                               <Button fx:id="btnReplyAll" mnemonicParsing="false" onMouseClicked="#onReplyAllButtonClick" prefHeight="31.0" prefWidth="90.0" text="Reply All" />
+                              <Button mnemonicParsing="false" onMouseClicked="#onForwardButtonClick" prefHeight="41.0" prefWidth="99.0" text="Forward" />
                            </children>
                         </HBox>
                      </bottom>

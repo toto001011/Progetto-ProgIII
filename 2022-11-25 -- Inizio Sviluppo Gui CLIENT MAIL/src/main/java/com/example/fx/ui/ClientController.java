@@ -1,10 +1,5 @@
  package com.example.fx.ui;
-import com.example.fx.functions.functions;
-import javafx.beans.Observable;
 import javafx.beans.property.FloatProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,18 +9,16 @@ import javafx.scene.input.MouseEvent;
 import com.example.fx.model.Client;
 import com.example.fx.model.Email;
 import javafx.scene.layout.BorderPane;
-import com.example.fx.functions.functions;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
-/**
+ /**
  * Classe Controller
  */
 
@@ -71,7 +64,9 @@ public class ClientController {
     private Email emptyEmail;
     private FloatProperty inboxDim;
     private Client client;
+    private Socket s;
 
+    //AtomicLong idNewEmail=new AtomicLong();
     //private  ObservableList<File> inboxCsv;
 
 
@@ -79,7 +74,8 @@ public class ClientController {
 
     private static final int SERVER_PORT = 8990;
 
-    private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+
+    //private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+"txt");
 
     @FXML
     public void initialize(Client client) throws IOException {
@@ -87,24 +83,30 @@ public class ClientController {
             throw new IllegalStateException("Model can only be initialized once");
         //istanza nuovo client
         model = client;//new Client("email");
+        System.out.println("CLIENT-->"+model.emailAddressProperty());
       //  model=client;
         model.loadEmail();
         //listenInbox();
 
         selectedEmail = null;
-        System.out.println("LIST EMAIL"+lstEmails);
+        //System.out.println("LIST EMAIL"+lstEmails);
         //binding tra lstEmails e inboxProperty
         lstEmails.itemsProperty().bind(model.inboxProperty());
         lstEmails.setOnMouseClicked(this::showSelectedEmail);
         lblUsername.textProperty().bind(model.emailAddressProperty());
         lblUsernameSend.textProperty().bind(model.emailAddressProperty());
 
-        emptyEmail = new Email(-1,"", List.of(""), "", "");
+        emptyEmail = new Email(null,"", List.of(""), "", "");
 
-        inboxDim=model.amountDueProperty();
+        //inboxDim=model.amountDueProperty();
 
-        System.out.println("PROPERTIES-->"+inboxDim);
-        listenInbox();
+
+
+
+
+
+
+      //  listenInbox();
 
 
 
@@ -119,12 +121,7 @@ public class ClientController {
     @FXML
     protected void onDeleteButtonClick() {
         model.deleteEmail(selectedEmail);
-        try {
-            inboxDim.setValue(Files.size(emails.toPath()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("PROPERTIES-->"+inboxDim);
+        //File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
 
         updateDetailView(emptyEmail);
     }
@@ -133,15 +130,17 @@ public class ClientController {
     protected void onbtUpdateViewlButtonClick(){
 
             model.refreshEmail();
+            System.out.println(("MODEL EMAIL "+model.emailAddressProperty()));
             updateDetailView(emptyEmail);
 
     }
 
+
     protected Email newMail(){
-        long id=20;
+         String idNewEmail = UUID.randomUUID().toString();
         //String sender= String.valueOf(lblUsernameSend);//"sender";
         String sender=lblUsernameSend.textProperty().getValue();
-
+        txtSendTo.textProperty().getValue();
         List<String> receivers=new ArrayList<String>();
         receivers=loadReceiver(txtSendTo.textProperty().getValue());
 
@@ -149,8 +148,9 @@ public class ClientController {
 
         String text=txtEmailContentSend.textProperty().getValue();
         //model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
-        Email emailsend = new Email(id, sender,  receivers,  subject,  text);
-        System.out.println("EMAIL CLIENT CONTROLLER-->"+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
+        Email emailsend = new Email(idNewEmail, sender,  receivers,  subject,  text);
+        System.out.println("EMAIL CLIENT CONTROLLER-->"+idNewEmail+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
+       // idNewEmail.getAndIncrement();
 
         return emailsend;
     }
@@ -171,30 +171,45 @@ public class ClientController {
     }
     @FXML
     protected void onSendButtonClick() throws IOException {
+       // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
 
-        Socket s =
-                new Socket("localhost",SERVER_PORT );
+        s = new Socket("localhost",SERVER_PORT );
+
         //definisco l'imput stream del socket client
-
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-
-       // out.println(newMail());
         out.writeObject(newMail());
         out.flush();
+
+
+
         //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
-       inboxDim.setValue(Files.size(emails.toPath()));
-        System.out.println("PROPERTIES-->"+inboxDim);
+        //inboxDim.setValue(Files.size(emails.toPath()));
+        //System.out.println("PROPERTIES-->"+inboxDim);
     }
 
     @FXML
     protected void onReplyButtonClick() {
+        pnlReadMessage.visibleProperty().set(false);
+        pnlNewMessage.visibleProperty().set(true);
+        txtEmailContent.visibleProperty().set(false);
+        txtEmailContentSend.visibleProperty().set(true);
+
+        txtSendTo.setText(lblFrom.getText());
+        txtSendTo.setEditable(false);
 
     }
 
     @FXML
-    protected void onReplyAllButtonClick() {
-        //model.deleteEmail(selectedEmail);
-        updateDetailView(emptyEmail);
+   protected void onReplyAllButtonClick() {
+        pnlReadMessage.visibleProperty().set(false);
+        pnlNewMessage.visibleProperty().set(true);
+        txtEmailContent.visibleProperty().set(false);
+        txtEmailContentSend.visibleProperty().set(true);
+
+
+        txtSendTo.setText(lblFrom.getText()+","+lblTo.getText());
+        txtSendTo.setEditable(false);
+
     }
 
     @FXML
@@ -203,6 +218,8 @@ public class ClientController {
 
         pnlReadMessage.visibleProperty().set(false);
         pnlNewMessage.visibleProperty().set(true);
+        txtSendTo.setEditable(true);
+
         txtEmailContent.visibleProperty().set(false);
         txtEmailContentSend.visibleProperty().set(true);
 
@@ -212,17 +229,21 @@ public class ClientController {
     }
     @FXML
     protected void onForwardButtonClick() {
-        model.deleteEmail(selectedEmail);
-        updateDetailView(emptyEmail);
+        pnlReadMessage.visibleProperty().set(false);
+        pnlNewMessage.visibleProperty().set(true);
+        txtEmailContent.visibleProperty().set(false);
+        txtEmailContentSend.visibleProperty().set(true);
+
+        txtEmailContentSend.setText(txtEmailContent.getText());
+        txtSendObj.setText(lblSubject.getText());
+
+
+
+        txtSendTo.setEditable(true);
     }
 
-    @FXML
-    protected void onInviaButtonClick() {
-        model.deleteEmail(selectedEmail);
-        updateDetailView(emptyEmail);
-    }
 
-public void listenInbox(){
+/*    public void listenInbox(){
         inboxDim.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -231,7 +252,7 @@ public void listenInbox(){
             }
         });
 
-}
+}*/
 
 
     /**
@@ -261,4 +282,20 @@ public void listenInbox(){
         }
     }
 
+    public boolean verifyEmail(List<String> socketMailTo){
+        int i=0;
+        boolean correct=true;
+        while (i<socketMailTo.size() && correct){
+            // System.out.println(socketMailTo.get(i));
+            if(socketMailTo.get(i).lastIndexOf("@")==-1 || socketMailTo.get(i).lastIndexOf(".it")==-1){
+                correct=false;
+            }
+            i++;
+        }
+
+
+
+        return correct;
+
+    }
 }

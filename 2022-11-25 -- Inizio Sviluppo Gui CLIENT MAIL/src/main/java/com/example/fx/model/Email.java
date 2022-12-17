@@ -14,7 +14,7 @@ public class Email implements Serializable {
     private List<String> receivers;
     private String subject;
     private String text;
-    private long id;
+    private String id;
 
     private Email() {}
 
@@ -25,11 +25,11 @@ public class Email implements Serializable {
      * @param receivers  emails dei destinatari
      * @param subject    oggetto della mail
      * @param text       testo della mail
-     * @param id          id univoco della mail in quella inbox
+     * @param id          id univoco della mail generara con una librerria specifica
      */
 
 
-    public Email(long id,String sender, List<String> receivers, String subject, String text) {
+    public Email(String id,String sender, List<String> receivers, String subject, String text) {
         this.id=id;
         this.sender = sender;
         this.subject = subject;
@@ -53,7 +53,7 @@ public class Email implements Serializable {
         return text;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -62,20 +62,31 @@ public class Email implements Serializable {
 
 
     public void sendMailToInbox(Email email) throws IOException {
-
-        String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt";
-
-        try(FileWriter fw = new FileWriter(filePath, true);
-            BufferedWriter emailWriter = new BufferedWriter(fw);) {
-
-            System.out.println("ID:" + id+" TO:"+email.receivers);
-
-            emailWriter.append(email.getId()+";"+email.getSender()+";"+email.receivers.get(0)+";"+email.getSubject()+";"+email.getText()+";\n");
-           // emailWriter.newLine();
-
-
+        String rcvsString="";
+        int i=0;
+        while(i<receivers.size()-1) {
+            rcvsString =""+rcvsString+receivers.get(i)+",";
+            i++;
         }
+        rcvsString =""+rcvsString+receivers.get(i);
+        System.out.println("RECEIVERS"+rcvsString);
+        i=0;
+        while(i<receivers.size()) {
+            //String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt";
+            String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + receivers.get(i) + ".txt";
+            try (FileWriter fw = new FileWriter(filePath, true);
+                 BufferedWriter emailWriter = new BufferedWriter(fw);) {
 
+                System.out.println("ID:" + id + " TO:" + email.receivers.get(i));
+
+
+                emailWriter.append(email.getId() + ";" + email.getSender() + ";" + rcvsString + ";" + email.getSubject() + ";" + email.getText() + ";\n");
+                // emailWriter.newLine();
+
+
+            }
+            i++;
+        }
 
 
 

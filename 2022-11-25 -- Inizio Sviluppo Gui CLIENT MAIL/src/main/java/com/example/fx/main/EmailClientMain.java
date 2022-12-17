@@ -12,13 +12,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class EmailClientMain extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        int i=0;
 
+            /*
             Client c1 = new Client("s@edu.it");
             URL clientUrl = EmailClientMain.class.getResource("newMail.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
@@ -30,22 +31,33 @@ public class EmailClientMain extends Application {
             contr.initialize(c1);
             stage.show();
             i++;
+*/
+
+        ArrayList<Client> clients=new ArrayList<>();
+        ArrayList<FXMLLoader> fxmlLoaders=new ArrayList<>();
+        ArrayList<Scene>scenes=new ArrayList<>();
+        ArrayList<Stage> stages=new ArrayList<>();
+        ArrayList<ClientController> controllers=new ArrayList<>();
+        URL clientUrl = EmailClientMain.class.getResource("newMail.fxml");
+
+        for(int i=0;i<2;i++) {
+            clients.add(new Client("studente."+i+"@edu.it"));
+
+            //FXMLLoader fxmlLoader2 = new FXMLLoader(clientUrl);
+            fxmlLoaders.add(new FXMLLoader(clientUrl));
+            scenes.add(new Scene(fxmlLoaders.get(i).load(), 900, 600));
+            stages.add(new Stage());
+            stages.get(i).setTitle("Email client"+i+"!");
+            stages.get(i).setScene(scenes.get(i));
 
 
+            //ClientController contr2 = fxmlLoader2.getController();
+        //    ClientController contr=new ClientController();
+            controllers.add(fxmlLoaders.get(i).getController());
 
-            Client c2 = new Client("q@edu.it");
-
-            FXMLLoader fxmlLoader2 = new FXMLLoader(clientUrl);
-            Scene scene2 = new Scene(fxmlLoader2.load(), 900, 600);
-            Stage stage2 = new Stage();
-            stage2.setTitle("Email client1!");
-            stage2.setScene(scene2);
-
-            ClientController contr2 = fxmlLoader2.getController();
-
-            contr2.initialize(c2);
-            stage2.show();
-            i++;
+            controllers.get(i).initialize(clients.get(i));
+            stages.get(i).show();
+        }
 
 
 

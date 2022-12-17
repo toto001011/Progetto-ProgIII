@@ -33,7 +33,7 @@ public class functions {
             String data = emailReader.nextLine();
 
             String[] dataSplitten= data.split(";");
-            long id=Long.parseLong(dataSplitten[0]);
+            String id=dataSplitten[0];
             Email email = new Email(id,
                     dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
             System.out.println("EMAIL COMPOSED-->"+dataSplitten[3]+"++>"+email.getText());
@@ -108,11 +108,23 @@ public class functions {
         System.out.println(rec);
         return rec;
 
+
+
+    }
+
+    public static void createFile() throws IOException {
+        File emails;
+        emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/test_file.txt");
+        System.out.println(emails.toPath());
+        BufferedWriter writer=new BufferedWriter(new FileWriter(emails));
+        writer.close();
+
+
     }
 
     public static void main(String []args) throws IOException {
         //loadEmail1();
-        deleteMail(0);
+      createFile();
 
     }
 }

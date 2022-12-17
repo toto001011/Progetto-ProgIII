@@ -1,12 +1,15 @@
 package com.example.fx.model;
 
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -22,8 +25,10 @@ public class Client {
     //private ObservableP CvsDim;
     private final StringProperty emailAddress;
 
-    private final FloatProperty inboxDim;
-   private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+    //private final FloatProperty inboxDim;
+  // private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+    private static   File emails;
+    //= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
 
     // public long idEmail;
     /**
@@ -37,14 +42,27 @@ public class Client {
         this.inboxContent = FXCollections.observableList(new LinkedList<>());
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
+       // System.out.println("EMAIL ADDRESS"+emailAddress);
         this.emailAddress = new SimpleStringProperty(emailAddress);
 
-        this.inboxDim=new SimpleFloatProperty();
+        this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
+        System.out.println("FILE EMAIL CLIENT"+ Path.of(emails.toURI()).toString());
+        /*BufferedWriter writer= null;
         try {
-            inboxDim.setValue(Files.size(emails.toPath()));
+            writer = new BufferedWriter(new FileWriter(emails));
+            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+       // System.out.println(emails.toPath());
+        /*this.inboxDim=new SimpleFloatProperty();
+        try {
+
+            inboxDim.setValue(Files.size(emails.toPath()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
 
         //Creo e setto la Observable list del file
         /*this.inboxCsvDim= new Long(2); //new LFXCollections.observableList(new ArrayList<>());
@@ -75,7 +93,13 @@ public class Client {
         return emailAddress;
     }
 
-    public FloatProperty amountDueProperty() {
+    /**
+     *
+     * @return email adress di questo particolare casella
+     */
+
+
+    /*public FloatProperty amountDueProperty() {
         //inboxDim.setValue(20);
         try {
             inboxDim.set(Files.size(emails.toPath()));
@@ -83,21 +107,13 @@ public class Client {
             throw new RuntimeException(e);
         }
         return inboxDim;
-    }
+    }*/
     /**
      *
      * @return   elimina l'email specificata
      *
      */
-    public void deleteEmail(Email email) {
 
-        inboxContent.remove(email);
-        try {
-            deleteMail(email.getId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void replyToAll(Email email){
 
@@ -112,29 +128,34 @@ public class Client {
 
 
     public  void loadEmail() throws IOException {
-        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
-        //inboxCsv.add(emails);
+       File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
         Scanner emailReader = new Scanner(emails);
+        System.out.println("EMAIL ADDRESS-->"+emailAddress);
+        System.out.println("EMAIL PATH LOAD"+emails+"\n\n");
+
+
         while (emailReader.hasNextLine()) {
 
             String data = emailReader.nextLine();
 
             String[] dataSplitten= data.split(";");
 
-            long id=Long.parseLong(dataSplitten[0]);
+            String id=dataSplitten[0];
+
             System.out.println("DATA"+dataSplitten[4]+" "+emailReader.hasNextLine());
             Email email = new Email(id,
                     dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
-           // System.out.println("EMAIL COMPOSED-->"+dataSplitten[3]+"++>"+email.getText());
             inboxContent.add(email);
 
         }
         System.out.println(emailReader.hasNextLine());
+
+
         emailReader.close();
     }
 
-/*
-    public void listenInbox(){
+
+/*    public void listenInbox(){
 
         //Create two simple observable integers.
 
@@ -158,8 +179,11 @@ public class Client {
             }
         }
     }*/
+
+
     public  void refreshEmail(){
         inboxContent.clear();
+       // System.out.println("REFRESH EMAIL"+emails);
         try {
             loadEmail();
         } catch (IOException e) {
@@ -170,16 +194,24 @@ public class Client {
     }
 
 
+    public void deleteEmail(Email email) {
 
-
+        inboxContent.remove(email);
+        try {
+            deleteMail(email.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Cancella la mail dal file csv Ricopiando quelle che devono rimanere in un altro file temporaneo che poi
      * viene rinominato in quello originale
      * @param idMail: indica il codice identificativo (progressivo) univoco della mail
      *
      */
-    public static void deleteMail(long idMail)throws IOException{
+    public  void deleteMail(String idMail)throws IOException{
         File tempEmails = new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/Tempemails.txt");
+        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
 
         BufferedReader emailReader = new BufferedReader(new FileReader(emails));
         BufferedWriter emailWriter=new BufferedWriter(new FileWriter(tempEmails));
@@ -191,9 +223,9 @@ public class Client {
         while ( ((data=emailReader.readLine() )!=null)  ) {
 
             String[] dataSplitten= data.split(";");
-            long id=Long.parseLong(dataSplitten[0]);
+            String id=dataSplitten[0];
             System.out.println("ID"+id);
-            if(id==idMail){
+            if(id.compareTo(idMail)==0 ){
                 trovato=true;
 
             }else{
@@ -239,7 +271,7 @@ public class Client {
                                 s.getOutputStream())),
                 true);
 
-        out.println("PROVA INVIO");
+      //  out.println("PROVA INVIO");
         out.flush();
 
     }

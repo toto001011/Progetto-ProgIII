@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- This program implements a multithreaded server that listens to port 8189 and echoes back
+ This program implements a multithreaded server that listens to port 8990 and echoes back
  all client input.
  */
 public class EmailServer extends Application {
