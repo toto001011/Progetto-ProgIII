@@ -16,7 +16,7 @@ public class Email implements Serializable {
     private String text;
     private String id;
 
-    private Email() {}
+    //private Email() {}
 
     /**
      * Costruttore della classe.

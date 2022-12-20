@@ -6,16 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,13 +31,13 @@ public class ServerController  {
     @FXML
     private BorderPane serverPane;
 
-
+    Map<String,Socket> socketToId=new HashMap<>();
 
 
     @FXML
     public void initialize() throws IOException {
 
-          System.out.println("Finestra del server: ");
+        System.out.println("Finestra del server: ");
 
           /*
             Creo un nuovo thread che ha il compito di essere sempre in attesa di accettare connessioni
@@ -56,11 +50,17 @@ public class ServerController  {
                 while (true) {
 
                     System.out.println("THREAD INITIALIZE -- I:"+i);
-                     incomes.add(s.accept());
-                    initilizeServer(incomes.get(i));
-                    System.out.println("INCOME SOCKET(I)"+incomes.get(i));
+                    incomes.add(s.accept());
+
+                    ServerTasks incomeTask=new ServerTasks(incomes.get(i));
+                    ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
+                    Vector<FutureTask<Socket>> tasks = new Vector<>();
+
+                    FutureTask<Socket> ft = new FutureTask<>(incomeTask);
+                    tasks.add(ft);
+                    exec.execute(ft);
                     i++;
-                    System.out.println("THREAD FINISH --I:"+i+"\n");
+                    System.out.println("THREAD FINISH --I:"+i+"ID STUDENTE O-->"+socketToId.get("studente.0@edu.it")+"\n");
                 }
 
             }
@@ -76,7 +76,7 @@ public class ServerController  {
 
 
 
-    public void initilizeServer(Socket income) throws IOException {
+    /*public void initilizeServer(Socket income) throws IOException {
 
         ServerTasks incomeTask=new ServerTasks(income);
 
@@ -94,7 +94,7 @@ public class ServerController  {
 
 
 
-    }
+    }*/
 
 
 
@@ -105,50 +105,96 @@ public class ServerController  {
         }
 
         /*
-        * Funzione Call() che viene chiamata dal vettore dei futureTask e specifica cosa fare
-        * */
+         * Funzione Call() che viene chiamata dal vettore dei futureTask e specifica cosa fare
+         * */
         public Socket call() throws IOException, ClassNotFoundException {
 
-
             int port;//porta alla quale si connette il socket
-           // System.out.println("Finestra TASK ");
 
 
 
-            //InputStream inStream = income.getInputStream();
-            ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
-            Scanner in = new Scanner(inStream);
-            //Outputstream per avvisare il client della mail che è stata ricevuta
-            ObjectOutputStream outStream = new ObjectOutputStream(income.getOutputStream());
-            PrintWriter out = new PrintWriter(String.valueOf(inStream));
+            while(income.isClosed()==false ) {
+                System.out.println("CALL TASK INIZIO ESECUZIONE");
+                ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
 
-            Email email = (Email) inStream.readObject();
 
-                //System.out.println("EMAIL "+ email.getText());
-                if(ExistEmail(email.getReceivers())) {
-                    /*Mail CORRETTA pronta per l'invio*/
-                    model=email;
-                    logArea.appendText(email.getSender() + " Invia Mai a "+email.getReceivers()+"\n");
-
-                    model.sendMailToInbox(email);
-
-                    outStream.writeObject(model);
+                   //Scanner in = new Scanner(inStream);
+                //Outputstream per avvisare il client della mail che è stata ricevuta
+                // ObjectOutputStream outStream = new ObjectOutputStream(income.getOutputStream());
 
 
 
-                }else{
-                    logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
+
+
+
+
+                Email email = (Email) inStream.readObject();
+                socketToId.put(email.getSender(), income);
+               // System.out.println("EMAIL RECEIVED "+email.getSender());
+
+
+
+
+                //InputStream inStream = income.getInputStream();
+
+                if(email.getId()==null) {
+                    System.out.println("Finestra TASK ");
+
+                    PrintWriter  out = new PrintWriter(
+                            new BufferedWriter(
+                                    new OutputStreamWriter(
+                                            socketToId.get(email.getReceivers().get(0)).getOutputStream())),
+                            true);;
+                    System.out.println("CALL SERVER TASK SOCKET-->" + socketToId.get(email.getSender()));
+
+
+                    out.println("INIT MESSAGE RECEIVED");
+                    // outInit.println("INIT MESSAGE RECEIVED");
+
+                   // out.flush();
+                    //outInit.close();
                 }
 
 
 
 
-            income.close();
-                return income;
+                System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
+                if (ExistEmail(email.getReceivers()) ) {
+                    System.out.println("-----EMAIL TO SEND-----");
 
 
+                    /*Mail CORRETTA pronta per l'invio*/
+                    model = email;
+                    logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
+
+                    System.out.println("OUTPUT STREAM SERVER TO->"+email.getReceivers().get(0));
+                 /*   PrintWriter outMsg = new PrintWriter(
+                            new BufferedWriter(
+                                    new OutputStreamWriter(
+                                            socketToId.get(email.getReceivers().get(0)).getOutputStream())),
+                            true);*/
+                    System.out.println("OUTPUT STREAM SERVER CREATED");
+
+                    /*outMsg.println("!!!  SERVER  !!!  ---   NUOVO MESSAGGIO");
+                    outMsg.flush();*/
 
 
+                    model.sendMailToInbox(email);
+
+                    // outStream.writeObject(model);
+
+
+                } else {
+                    if(email.getId()!=null)
+                        logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
+                }
+
+                System.out.println("CALL TASK FINE ESECUZIONE");
+
+
+            }
+
+            return income;
         }
 
     }
@@ -159,7 +205,7 @@ public class ServerController  {
         int i=0;
         boolean correct=true;
         while (i<socketMailTo.size() && correct){
-            // System.out.println(socketMailTo.get(i));
+            System.out.println(socketMailTo.get(i));
             if(socketMailTo.get(i).lastIndexOf("@")==-1 || socketMailTo.get(i).lastIndexOf(".it")==-1){
                 correct=false;
             }
@@ -171,6 +217,21 @@ public class ServerController  {
         return correct;
 
     }
+/*
+    public String getSocketEmail(Socket income) throws IOException, ClassNotFoundException {
+        System.out.println("AVVIO STREAM");
+        ObjectInputStream inStream =new ObjectInputStream(income.getInputStream());
+        System.out.println("STREAM AVVIATO");
+       Scanner in = new Scanner(inStream);
+        System.out.println("STREAM AVVIATO");
+        //Outputstream per avvisare il client della mail che è stata ricevuta
 
 
+        Email email = (Email) inStream.readObject();
+        inStream.close();
+        //System.out.println("EMAIL "+ email.getText());
+        //System.out.println("SOCKET FROM:" + email.getSender());
+        return email.getSender();
+
+    }*/
 }

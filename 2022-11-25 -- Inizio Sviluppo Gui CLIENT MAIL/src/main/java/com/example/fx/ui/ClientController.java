@@ -1,4 +1,4 @@
- package com.example.fx.ui;
+package com.example.fx.ui;
 import javafx.beans.property.FloatProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -11,14 +11,16 @@ import com.example.fx.model.Email;
 import javafx.scene.layout.BorderPane;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicLong;
 
- /**
+/**
  * Classe Controller
  */
 
@@ -35,8 +37,8 @@ public class ClientController {
     @FXML
     private Label lblUsername;
 
-      @FXML
-      private Label lblUsernameSend;
+    @FXML
+    private Label lblUsernameSend;
 
     @FXML
     private TextArea txtEmailContent;
@@ -64,7 +66,7 @@ public class ClientController {
     private Email emptyEmail;
     private FloatProperty inboxDim;
     private Client client;
-    private Socket s;
+    private Socket socket;
 
     //AtomicLong idNewEmail=new AtomicLong();
     //private  ObservableList<File> inboxCsv;
@@ -81,10 +83,12 @@ public class ClientController {
     public void initialize(Client client) throws IOException {
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
+        socket = new Socket("localhost",SERVER_PORT );
+
         //istanza nuovo client
         model = client;//new Client("email");
         System.out.println("CLIENT-->"+model.emailAddressProperty());
-      //  model=client;
+        //  model=client;
         model.loadEmail();
         //listenInbox();
 
@@ -98,15 +102,52 @@ public class ClientController {
 
         emptyEmail = new Email(null,"", List.of(""), "", "");
 
+
+        // this.onSendButtonClick();
+
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        Email emailInit=new Email(null,lblUsername.textProperty().getValue(), List.of(lblUsername.textProperty().getValue()), "", "");
+       // System.out.println("EMAIL INIT"+emailInit.getSender());
+        out.writeObject(emailInit);
+
         //inboxDim=model.amountDueProperty();
 
+       Task task = new Task<Void>() {
+            @Override public Void call() throws IOException {
+                System.out.println("INIZIO THREAD ASCOLTO ");
+
+                InputStream inStream = socket.getInputStream();//Serve per "leggere" i byte inviati dal server(o da altra parte)
+               // System.out.println("    GET INPUT STREAM "+inStream);
+                Scanner in = new Scanner(inStream);
+                //System.out.println("    GET SCANNER"+in);
+
+                while (true) {
+
+                    System.out.println("    STREAM IN ASCOLTO");
+                    //while (in.hasNextLine()) {
+                        String line = in.nextLine();
+                        System.out.println(line);
+                  //  }
+                    System.out.println("    FINE STREAM  ASCOLTO");
+                   // inStream.close();
+
+
+
+
+                }
+              //  System.out.println("FINE THREAD ASCOLTO ");
+
+            }
+        };
+        new Thread(task).start();
 
 
 
 
 
 
-      //  listenInbox();
+
+        //  listenInbox();
 
 
 
@@ -129,19 +170,19 @@ public class ClientController {
     @FXML
     protected void onbtUpdateViewlButtonClick(){
 
-            model.refreshEmail();
-            System.out.println(("MODEL EMAIL "+model.emailAddressProperty()));
-            updateDetailView(emptyEmail);
+        model.refreshEmail();
+        System.out.println(("MODEL EMAIL "+model.emailAddressProperty()));
+        updateDetailView(emptyEmail);
 
     }
 
 
     protected Email newMail(){
-         String idNewEmail = UUID.randomUUID().toString();
+        String idNewEmail = UUID.randomUUID().toString();
         //String sender= String.valueOf(lblUsernameSend);//"sender";
         String sender=lblUsernameSend.textProperty().getValue();
         txtSendTo.textProperty().getValue();
-        List<String> receivers=new ArrayList<String>();
+        List<String> receivers;
         receivers=loadReceiver(txtSendTo.textProperty().getValue());
 
         String subject=txtSendObj.textProperty().getValue();
@@ -149,8 +190,8 @@ public class ClientController {
         String text=txtEmailContentSend.textProperty().getValue();
         //model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
         Email emailsend = new Email(idNewEmail, sender,  receivers,  subject,  text);
-        System.out.println("EMAIL CLIENT CONTROLLER-->"+idNewEmail+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
-       // idNewEmail.getAndIncrement();
+        //System.out.println("EMAIL CLIENT CONTROLLER-->"+idNewEmail+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
+        // idNewEmail.getAndIncrement();
 
         return emailsend;
     }
@@ -165,20 +206,20 @@ public class ClientController {
             rec.add(rsplit);
 
         }
-      //  System.out.println("REC"+rec);
+        //  System.out.println("REC"+rec);
         return rec;
 
     }
     @FXML
     protected void onSendButtonClick() throws IOException {
-       // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
+        // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
 
-        s = new Socket("localhost",SERVER_PORT );
+
 
         //definisco l'imput stream del socket client
-        ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         out.writeObject(newMail());
-        out.flush();
+        // out.flush();
 
 
 
@@ -200,7 +241,7 @@ public class ClientController {
     }
 
     @FXML
-   protected void onReplyAllButtonClick() {
+    protected void onReplyAllButtonClick() {
         pnlReadMessage.visibleProperty().set(false);
         pnlNewMessage.visibleProperty().set(true);
         txtEmailContent.visibleProperty().set(false);

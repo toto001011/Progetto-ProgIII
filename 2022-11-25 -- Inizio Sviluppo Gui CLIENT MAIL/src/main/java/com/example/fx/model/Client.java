@@ -29,6 +29,15 @@ public class Client {
   // private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
     private static   File emails;
     //= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
+private    Socket s;
+
+    {
+        try {
+            s = new Socket("localhost", 8990);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // public long idEmail;
     /**
@@ -47,6 +56,13 @@ public class Client {
 
         this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
         System.out.println("FILE EMAIL CLIENT"+ Path.of(emails.toURI()).toString());
+            System.out.println("TRY TO SEND SOCKET");
+            //sendSocket(new Email(null,this.emailAddress.getValue(), List.of(""), "", ""));
+            System.out.println("THIS ADDRESS"+this.emailAddress.getValue());
+            System.out.println("SOCKET SENDED");
+
+
+        //sendSocket(new Email(-1,this.emailAddress,null,null,null));
         /*BufferedWriter writer= null;
         try {
             writer = new BufferedWriter(new FileWriter(emails));
@@ -260,9 +276,7 @@ public class Client {
      * restituisce un ArrayList di riceventi
      */
 
-    public void sendSocket(Email email) throws IOException {
-        Socket s =
-                new Socket("localhost", 8180);
+    /*public void sendSocket(Email email) throws IOException {
 
         PrintWriter
                 out = new PrintWriter(
@@ -272,9 +286,10 @@ public class Client {
                 true);
 
       //  out.println("PROVA INVIO");
+
         out.flush();
 
-    }
+    }*/
 
 
 }
