@@ -130,7 +130,7 @@ public class ServerController  {
 
                 Email email = (Email) inStream.readObject();
                 socketToId.put(email.getSender(), income);
-               // System.out.println("EMAIL RECEIVED "+email.getSender());
+                System.out.println("EMAIL RECEIVED "+email.getSender());
 
 
 
@@ -159,7 +159,7 @@ public class ServerController  {
 
 
                 System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
-                if (ExistEmail(email.getReceivers()) ) {
+                if (ExistEmail(email.getReceivers()) && email.getId()!=null  ) {
                     System.out.println("-----EMAIL TO SEND-----");
 
 
@@ -168,15 +168,15 @@ public class ServerController  {
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
 
                     System.out.println("OUTPUT STREAM SERVER TO->"+email.getReceivers().get(0));
-                 /*   PrintWriter outMsg = new PrintWriter(
+                    PrintWriter outMsg = new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
                                             socketToId.get(email.getReceivers().get(0)).getOutputStream())),
-                            true);*/
+                            true);
                     System.out.println("OUTPUT STREAM SERVER CREATED");
 
-                    /*outMsg.println("!!!  SERVER  !!!  ---   NUOVO MESSAGGIO");
-                    outMsg.flush();*/
+                    outMsg.println("NUOVO MESSAGGIO");
+                    outMsg.flush();
 
 
                     model.sendMailToInbox(email);

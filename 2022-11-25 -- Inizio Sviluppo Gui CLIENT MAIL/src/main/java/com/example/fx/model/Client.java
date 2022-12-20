@@ -5,6 +5,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,7 +31,11 @@ public class Client {
   // private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
     private static   File emails;
     //= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
-private    Socket s;
+
+    @FXML
+    private Stage stage;
+
+    private    Socket s;
 
     {
         try {
@@ -53,7 +59,6 @@ private    Socket s;
         this.inbox.set(inboxContent);
        // System.out.println("EMAIL ADDRESS"+emailAddress);
         this.emailAddress = new SimpleStringProperty(emailAddress);
-
         this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
         System.out.println("FILE EMAIL CLIENT"+ Path.of(emails.toURI()).toString());
             System.out.println("TRY TO SEND SOCKET");

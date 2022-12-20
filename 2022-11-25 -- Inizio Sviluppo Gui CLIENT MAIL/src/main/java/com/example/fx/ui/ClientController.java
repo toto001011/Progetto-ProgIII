@@ -1,24 +1,18 @@
 package com.example.fx.ui;
+import javafx.application.Platform;
 import javafx.beans.property.FloatProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import com.example.fx.model.Client;
 import com.example.fx.model.Email;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Classe Controller
@@ -61,6 +55,12 @@ public class ClientController {
     private TextArea txtSendTo;
     @FXML
     private TextArea txtSendObj;
+
+    @FXML
+    private Button close;
+
+    @FXML
+    private BorderPane popUp;
     private Client model;
     private Email selectedEmail;
     private Email emptyEmail;
@@ -81,6 +81,7 @@ public class ClientController {
 
     @FXML
     public void initialize(Client client) throws IOException {
+
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
         socket = new Socket("localhost",SERVER_PORT );
@@ -103,6 +104,8 @@ public class ClientController {
         emptyEmail = new Email(null,"", List.of(""), "", "");
 
 
+
+
         // this.onSendButtonClick();
 
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -110,9 +113,10 @@ public class ClientController {
        // System.out.println("EMAIL INIT"+emailInit.getSender());
         out.writeObject(emailInit);
 
-        //inboxDim=model.amountDueProperty();
+
 
        Task task = new Task<Void>() {
+           @FXML
             @Override public Void call() throws IOException {
                 System.out.println("INIZIO THREAD ASCOLTO ");
 
@@ -121,14 +125,31 @@ public class ClientController {
                 Scanner in = new Scanner(inStream);
                 //System.out.println("    GET SCANNER"+in);
 
+
                 while (true) {
 
-                    System.out.println("    STREAM IN ASCOLTO");
+                    System.out.println("STREAM IN ASCOLTO");
                     //while (in.hasNextLine()) {
                         String line = in.nextLine();
-                        System.out.println(line);
+                        System.out.println("    "+line);
+                        //popUp newMsg= new popUp(new Stage());
+                    if(line.compareTo("NUOVO MESSAGGIO")==0) {
+                        Platform.runLater(() -> {
+                            model.refreshEmail();
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle(lblUsername.textProperty().getValue()+"Inbox");
+                            alert.setHeaderText("New Messagge ");
+                            // alert.setContentText("I have a great message for you!");
+                            alert.show();
+                        });
+                    }
+
+
+
+
+
                   //  }
-                    System.out.println("    FINE STREAM  ASCOLTO");
+                    System.out.println("FINE STREAM  ASCOLTO");
                    // inStream.close();
 
 
@@ -166,7 +187,10 @@ public class ClientController {
 
         updateDetailView(emptyEmail);
     }
+    @FXML
+    protected void onbtnClose(){
 
+    }
     @FXML
     protected void onbtUpdateViewlButtonClick(){
 
