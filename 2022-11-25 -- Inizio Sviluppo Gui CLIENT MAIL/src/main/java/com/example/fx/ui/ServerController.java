@@ -140,7 +140,7 @@ public class ServerController  {
                 if(email.getId()==null) {
                     System.out.println("Finestra TASK ");
 
-                    PrintWriter  out = new PrintWriter(
+                   /* PrintWriter  out = new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
                                             socketToId.get(email.getReceivers().get(0)).getOutputStream())),
@@ -148,7 +148,8 @@ public class ServerController  {
                     System.out.println("CALL SERVER TASK SOCKET-->" + socketToId.get(email.getSender()));
 
 
-                    out.println("INIT MESSAGE RECEIVED");
+
+                    out.println("INIT MESSAGE RECEIVED");*/
                     // outInit.println("INIT MESSAGE RECEIVED");
 
                    // out.flush();
@@ -168,15 +169,18 @@ public class ServerController  {
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
 
                     System.out.println("OUTPUT STREAM SERVER TO->"+email.getReceivers().get(0));
-                    PrintWriter outMsg = new PrintWriter(
+                   /* PrintWriter outMsg = new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
                                             socketToId.get(email.getReceivers().get(0)).getOutputStream())),
-                            true);
+                            true);*/
+                    ObjectOutputStream outMsg=new ObjectOutputStream(socketToId.get(email.getReceivers().get(0)).getOutputStream());
                     System.out.println("OUTPUT STREAM SERVER CREATED");
 
-                    outMsg.println("NUOVO MESSAGGIO");
-                    outMsg.flush();
+                   // outMsg.println("NUOVO MESSAGGIO");
+                   // outMsg.flush();
+                    outMsg.writeObject(email);
+
 
 
                     model.sendMailToInbox(email);

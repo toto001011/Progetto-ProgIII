@@ -35,7 +35,7 @@ public class Client {
     @FXML
     private Stage stage;
 
-    private    Socket s;
+    /*private    Socket s;
 
     {
         try {
@@ -43,7 +43,7 @@ public class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     // public long idEmail;
     /**
@@ -65,33 +65,6 @@ public class Client {
             //sendSocket(new Email(null,this.emailAddress.getValue(), List.of(""), "", ""));
             System.out.println("THIS ADDRESS"+this.emailAddress.getValue());
             System.out.println("SOCKET SENDED");
-
-
-        //sendSocket(new Email(-1,this.emailAddress,null,null,null));
-        /*BufferedWriter writer= null;
-        try {
-            writer = new BufferedWriter(new FileWriter(emails));
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-       // System.out.println(emails.toPath());
-        /*this.inboxDim=new SimpleFloatProperty();
-        try {
-
-            inboxDim.setValue(Files.size(emails.toPath()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
-
-        //Creo e setto la Observable list del file
-        /*this.inboxCsvDim= new Long(2); //new LFXCollections.observableList(new ArrayList<>());
-        this.inboxCsvDim= new ObservableLongValue() {};
-        this.Cvs=new SimpleListProperty<>();
-        this.Cvs.set(inboxCsv);*/
-
-
 
     }
 
@@ -120,20 +93,6 @@ public class Client {
      */
 
 
-    /*public FloatProperty amountDueProperty() {
-        //inboxDim.setValue(20);
-        try {
-            inboxDim.set(Files.size(emails.toPath()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return inboxDim;
-    }*/
-    /**
-     *
-     * @return   elimina l'email specificata
-     *
-     */
 
 
     public void replyToAll(Email email){
@@ -176,30 +135,7 @@ public class Client {
     }
 
 
-/*    public void listenInbox(){
 
-        //Create two simple observable integers.
-
-       // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
-
-        SimpleLongProperty smartVar = new SimpleLongProperty();
-
-        smartVar.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-                System.out.println("CHANGED TO "+newValue);
-                inboxContent.clear();
-
-            }
-        });
-        while (true) {
-            try {
-                smartVar.set(Files.size(emails.toPath()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }*/
 
 
     public  void refreshEmail(){
@@ -214,7 +150,11 @@ public class Client {
 
     }
 
-
+    /**
+     *
+     * @return   elimina l'email specificata
+     *
+     */
     public void deleteEmail(Email email) {
 
         inboxContent.remove(email);
@@ -295,6 +235,10 @@ public class Client {
         out.flush();
 
     }*/
+
+    public void loadToInbox(Email email){
+        inboxContent.add(email);
+    }
 
 
 }

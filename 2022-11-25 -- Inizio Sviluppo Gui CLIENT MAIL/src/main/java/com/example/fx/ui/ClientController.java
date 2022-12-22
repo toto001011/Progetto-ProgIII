@@ -11,8 +11,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 /**
  * Classe Controller
@@ -82,9 +86,15 @@ public class ClientController {
     @FXML
     public void initialize(Client client) throws IOException {
 
+
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
         socket = new Socket("localhost",SERVER_PORT );
+
+            
+
+
+
 
         //istanza nuovo client
         model = client;//new Client("email");
@@ -120,29 +130,40 @@ public class ClientController {
             @Override public Void call() throws IOException {
                 System.out.println("INIZIO THREAD ASCOLTO ");
 
-                InputStream inStream = socket.getInputStream();//Serve per "leggere" i byte inviati dal server(o da altra parte)
-               // System.out.println("    GET INPUT STREAM "+inStream);
-                Scanner in = new Scanner(inStream);
                 //System.out.println("    GET SCANNER"+in);
 
 
-                while (true) {
 
-                    System.out.println("STREAM IN ASCOLTO");
-                    //while (in.hasNextLine()) {
-                        String line = in.nextLine();
-                        System.out.println("    "+line);
-                        //popUp newMsg= new popUp(new Stage());
-                    if(line.compareTo("NUOVO MESSAGGIO")==0) {
-                        Platform.runLater(() -> {
-                            model.refreshEmail();
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle(lblUsername.textProperty().getValue()+"Inbox");
-                            alert.setHeaderText("New Messagge ");
-                            // alert.setContentText("I have a great message for you!");
-                            alert.show();
-                        });
-                    }
+               while (true) {
+                   ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
+
+                   //Serve per "leggere" i byte inviati dal server(o da altra parte)
+
+                   System.out.println("    GET INPUT STREAM "+inStream);
+
+                   System.out.println("STREAM IN ASCOLTO");
+                   Email newEmail;
+                   //while (in.hasNextLine()) {
+                   //String line = in.nextLine();
+                   //System.out.println("    "+line);
+                   //popUp newMsg= new popUp(new Stage());
+
+                   try {
+                       newEmail=(Email) inStream.readObject();
+                   } catch (ClassNotFoundException e) {
+                       throw new RuntimeException(e);
+                   }
+                   //if(inStream.readObject()) {
+                   Platform.runLater(() -> {
+                       // model.refreshEmail();
+                       // model.loadToInbox();
+                       model.loadToInbox(newEmail);
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                       alert.setTitle(lblUsername.textProperty().getValue()+"Inbox");
+                       alert.setHeaderText("New Messagge");
+                       // alert.setContentText("I have a great message for you!");
+                       alert.show();
+                   });
 
 
 
