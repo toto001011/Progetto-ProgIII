@@ -82,16 +82,25 @@ public class ClientController {
 
 
     //private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+"txt");
+   /* private void socketConnect(Socket s)  {
+        try {
+            s=new Socket("localhost",SERVER_PORT );
+        } catch (IOException  e) {
+            System.err.println("CONNESSIONE AL SERVER NON RIUSCITA");
 
+         }
+    }*/
     @FXML
     public void initialize(Client client) throws IOException {
 
 
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
-        socket = new Socket("localhost",SERVER_PORT );
 
-            
+        //socket = new Socket("localhost",SERVER_PORT );
+
+            //socketConnect(socket);
+        socket=new Socket("localhost",SERVER_PORT );
 
 
 
@@ -153,6 +162,7 @@ public class ClientController {
                    } catch (ClassNotFoundException e) {
                        throw new RuntimeException(e);
                    }
+                   
                    //if(inStream.readObject()) {
                    Platform.runLater(() -> {
                        // model.refreshEmail();
@@ -258,14 +268,25 @@ public class ClientController {
     @FXML
     protected void onSendButtonClick() throws IOException {
         // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
-
+        Email emailToSend=newMail();
 
 
         //definisco l'imput stream del socket client
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        out.writeObject(newMail());
-        // out.flush();
+        if(ExistEmail(emailToSend.getReceivers())) {
+            out.writeObject(emailToSend);
+            // out.flush();
+        }/*else{
+            Platform.runLater(() -> {
+                // model.refreshEmail();
+                // model.loadToInbox();
 
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("ATTENZION MAIL NON CORRETTA");
+                // alert.setContentText("I have a great message for you!");
+                alert.show();
+            });
+        }*/
 
 
         //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
@@ -383,5 +404,28 @@ public class ClientController {
 
         return correct;
 
+    }
+    public boolean ExistEmail(List<String> socketMailTo) {
+        int i = 0;
+        boolean correct = true;
+        while (i < socketMailTo.size() && correct) {
+            System.out.println(socketMailTo.get(i));
+            if (socketMailTo.get(i).lastIndexOf("@") == -1 || socketMailTo.get(i).lastIndexOf(".it") == -1) {
+                correct = false;
+            }
+            i++;
+        }
+        if(!correct){
+            Platform.runLater(() -> {
+                // model.refreshEmail();
+                // model.loadToInbox();
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("ATTENZION MAIL NON CORRETTA");
+                // alert.setContentText("I have a great message for you!");
+                alert.show();
+            });
+        }
+        return correct;
     }
 }

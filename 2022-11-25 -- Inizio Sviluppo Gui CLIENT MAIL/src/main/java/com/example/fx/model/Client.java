@@ -95,11 +95,11 @@ public class Client {
 
 
 
-    public void replyToAll(Email email){
+/*    public void replyToAll(Email email){
 
         //Email newEmail=new Email(email.getReceivers(),email.getSender(), )
     }
-
+*/
 
     /**
      * Carico da file csv una eventuale lista di mail

@@ -1,8 +1,10 @@
 package com.example.fx.ui;
 
 import com.example.fx.model.Email;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 
@@ -159,7 +161,7 @@ public class ServerController  {
 
 
 
-                System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
+                //System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
                 if (ExistEmail(email.getReceivers()) && email.getId()!=null  ) {
                     System.out.println("-----EMAIL TO SEND-----");
 
@@ -168,32 +170,29 @@ public class ServerController  {
                     model = email;
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
 
-                    System.out.println("OUTPUT STREAM SERVER TO->"+email.getReceivers().get(0));
-                   /* PrintWriter outMsg = new PrintWriter(
-                            new BufferedWriter(
-                                    new OutputStreamWriter(
-                                            socketToId.get(email.getReceivers().get(0)).getOutputStream())),
-                            true);*/
-                    ObjectOutputStream outMsg=new ObjectOutputStream(socketToId.get(email.getReceivers().get(0)).getOutputStream());
-                    System.out.println("OUTPUT STREAM SERVER CREATED");
-
-                   // outMsg.println("NUOVO MESSAGGIO");
-                   // outMsg.flush();
-                    outMsg.writeObject(email);
+                    int i = 0;
+                    while (i < email.getReceivers().size()) {
+                        System.out.println("OUTPUT STREAM SERVER TO->" + email.getReceivers().get(i));
 
 
+                        ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getReceivers().get(i)).getOutputStream());
+                        System.out.println("OUTPUT STREAM SERVER CREATED");
 
+                        // outMsg.println("NUOVO MESSAGGIO");
+                        // outMsg.flush();
+                        outMsg.writeObject(email);
+
+                        // outStream.writeObject(model);
+                        i++;
+
+                    }
                     model.sendMailToInbox(email);
+                    } else{
+                        if (email.getId() != null)
+                            logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
+                    }
 
-                    // outStream.writeObject(model);
-
-
-                } else {
-                    if(email.getId()!=null)
-                        logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
-                }
-
-                System.out.println("CALL TASK FINE ESECUZIONE");
+                    System.out.println("CALL TASK FINE ESECUZIONE");
 
 
             }
@@ -207,15 +206,27 @@ public class ServerController  {
 
     public boolean ExistEmail(List<String> socketMailTo){
         int i=0;
+        //socketToId.get(socketMailTo.get(i));
         boolean correct=true;
         while (i<socketMailTo.size() && correct){
             System.out.println(socketMailTo.get(i));
-            if(socketMailTo.get(i).lastIndexOf("@")==-1 || socketMailTo.get(i).lastIndexOf(".it")==-1){
+            if(socketToId.get(socketMailTo.get(i))==null){
                 correct=false;
             }
             i++;
         }
 
+        if(!correct){
+            Platform.runLater(() -> {
+                // model.refreshEmail();
+                // model.loadToInbox();
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("ATTENZIONE MAIL NON ESISTENTE");
+                // alert.setContentText("I have a great message for you!");
+                alert.show();
+            });
+        }
 
 
         return correct;
@@ -237,5 +248,9 @@ public class ServerController  {
         //System.out.println("SOCKET FROM:" + email.getSender());
         return email.getSender();
 
+    }*/
+/*
+    private numOfReceivers(Email email){
+        email.getReceivers().size();
     }*/
 }
