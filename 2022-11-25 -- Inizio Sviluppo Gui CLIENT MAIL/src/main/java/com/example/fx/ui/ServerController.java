@@ -188,7 +188,15 @@ public class ServerController  {
                     }
                     model.sendMailToInbox(email);
                     } else{
-                        if (email.getId() != null)
+                        if (email.getId() != null) {
+                            //Mando l'avviso al Cient che la mail non esiste
+                            ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getSender()).getOutputStream());
+                            System.out.println("OUTPUT STREAM SERVER CREATED");
+
+                            // outMsg.println("NUOVO MESSAGGIO");
+                            // outMsg.flush();
+                            outMsg.writeObject(new Email(null,"", List.of(""), "", ""));
+                        }
                             logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
                     }
 
@@ -216,7 +224,7 @@ public class ServerController  {
             i++;
         }
 
-        if(!correct){
+        /*if(!correct){
             Platform.runLater(() -> {
                 // model.refreshEmail();
                 // model.loadToInbox();
@@ -226,7 +234,7 @@ public class ServerController  {
                 // alert.setContentText("I have a great message for you!");
                 alert.show();
             });
-        }
+        }*/
 
 
         return correct;

@@ -162,18 +162,30 @@ public class ClientController {
                    } catch (ClassNotFoundException e) {
                        throw new RuntimeException(e);
                    }
-                   
-                   //if(inStream.readObject()) {
-                   Platform.runLater(() -> {
-                       // model.refreshEmail();
-                       // model.loadToInbox();
-                       model.loadToInbox(newEmail);
-                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                       alert.setTitle(lblUsername.textProperty().getValue()+"Inbox");
-                       alert.setHeaderText("New Messagge");
-                       // alert.setContentText("I have a great message for you!");
-                       alert.show();
-                   });
+                   if(newEmail.getId()!=null) {
+                       //if(inStream.readObject()) {
+                       Platform.runLater(() -> {
+                           // model.refreshEmail();
+                           // model.loadToInbox();
+                           model.loadToInbox(newEmail);
+                           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                           alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                           alert.setHeaderText("New Messagge");
+                           // alert.setContentText("I have a great message for you!");
+                           alert.show();
+                       });
+                   }else{
+                       Platform.runLater(() -> {
+                                   // model.refreshEmail();
+                                   // model.loadToInbox();
+                                   model.loadToInbox(newEmail);
+                                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                   alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                                   alert.setHeaderText("EMAIL DI DESTINAZIONE NON ESISTENTE");
+                                   // alert.setContentText("I have a great message for you!");
+                                   alert.show();
+                         });
+                   }
 
 
 
