@@ -117,7 +117,9 @@ public class ServerController  {
 
             while(income.isClosed()==false ) {
                 System.out.println("CALL TASK INIZIO ESECUZIONE");
+                System.out.println("    CREAZIONE STREAM");
                 ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
+                System.out.println("    STREAM CREATO");
 
 
                    //Scanner in = new Scanner(inStream);
@@ -139,9 +141,9 @@ public class ServerController  {
 
                 //InputStream inStream = income.getInputStream();
 
-                if(email.getId()==null) {
+                if(email.getId()==null || email.getId().compareTo("-1")==0) {
                     System.out.println("Finestra TASK ");
-
+                    continue;
                    /* PrintWriter  out = new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
@@ -162,7 +164,7 @@ public class ServerController  {
 
 
                 //System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
-                if (ExistEmail(email.getReceivers()) && email.getId()!=null  ) {
+                if (ExistEmail(email.getReceivers()) && email.getId()!=null  && email.getId().compareTo("-1")!=0)  {
                     System.out.println("-----EMAIL TO SEND-----");
 
 
