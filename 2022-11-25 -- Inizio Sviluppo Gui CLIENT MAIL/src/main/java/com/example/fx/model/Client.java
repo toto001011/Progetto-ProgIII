@@ -27,23 +27,12 @@ public class Client {
     //private ObservableP CvsDim;
     private final StringProperty emailAddress;
 
-    //private final FloatProperty inboxDim;
-  // private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
     private static   File emails;
-    //= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt");
 
     @FXML
     private Stage stage;
 
-    /*private    Socket s;
 
-    {
-        try {
-            s = new Socket("localhost", 8990);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 
     // public long idEmail;
     /**
@@ -57,14 +46,8 @@ public class Client {
         this.inboxContent = FXCollections.observableList(new LinkedList<>());
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
-       // System.out.println("EMAIL ADDRESS"+emailAddress);
         this.emailAddress = new SimpleStringProperty(emailAddress);
         this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
-        System.out.println("FILE EMAIL CLIENT"+ Path.of(emails.toURI()).toString());
-            System.out.println("TRY TO SEND SOCKET");
-            //sendSocket(new Email(null,this.emailAddress.getValue(), List.of(""), "", ""));
-            System.out.println("THIS ADDRESS"+this.emailAddress.getValue());
-            System.out.println("SOCKET SENDED");
 
     }
 
@@ -94,13 +77,6 @@ public class Client {
 
 
 
-
-/*    public void replyToAll(Email email){
-
-        //Email newEmail=new Email(email.getReceivers(),email.getSender(), )
-    }
-*/
-
     /**
      * Carico da file csv una eventuale lista di mail
      *
@@ -110,8 +86,6 @@ public class Client {
     public  void loadEmail() throws IOException {
        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
         Scanner emailReader = new Scanner(emails);
-        System.out.println("EMAIL ADDRESS-->"+emailAddress);
-        System.out.println("EMAIL PATH LOAD"+emails+"\n\n");
 
 
         while (emailReader.hasNextLine()) {
@@ -122,14 +96,11 @@ public class Client {
 
             String id=dataSplitten[0];
 
-            System.out.println("DATA"+dataSplitten[4]+" "+emailReader.hasNextLine());
             Email email = new Email(id,
                     dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
             inboxContent.add(email);
 
         }
-        System.out.println(emailReader.hasNextLine());
-
 
         emailReader.close();
     }
@@ -140,7 +111,6 @@ public class Client {
 
     public  void refreshEmail(){
         inboxContent.clear();
-       // System.out.println("REFRESH EMAIL"+emails);
         try {
             loadEmail();
         } catch (IOException e) {
@@ -180,7 +150,6 @@ public class Client {
         String data;
 
         boolean trovato=false;
-        //  System.out.println(emailReader.readLine());
         while ( ((data=emailReader.readLine() )!=null)  ) {
 
             String[] dataSplitten= data.split(";");
@@ -202,9 +171,7 @@ public class Client {
         emailWriter.close();
         emails.delete();
         boolean successful = tempEmails.renameTo(emails);
-        //emails=tempEmails;//per permettere al listener di avviso ricezione mail che il file "è cambiato"
 
-        System.out.println("RENAMED");
 
 
     }
@@ -221,20 +188,7 @@ public class Client {
      * restituisce un ArrayList di riceventi
      */
 
-    /*public void sendSocket(Email email) throws IOException {
 
-        PrintWriter
-                out = new PrintWriter(
-                new BufferedWriter(
-                        new OutputStreamWriter(
-                                s.getOutputStream())),
-                true);
-
-      //  out.println("PROVA INVIO");
-
-        out.flush();
-
-    }*/
 
     public void loadToInbox(Email email){
         inboxContent.add(email);

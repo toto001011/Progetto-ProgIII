@@ -153,7 +153,6 @@ public class ClientController {
 
         //istanza nuovo client
         model = client;//new Client("email");
-        System.out.println("CLIENT-->"+model.emailAddressProperty());
         //  model=client;
         model.loadEmail();
 
