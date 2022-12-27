@@ -77,7 +77,7 @@ public class ClientController {
     //private  ObservableList<File> inboxCsv;
     private boolean tryToReconnect=true;
 
-
+    private boolean offline=false;
 
 
     private static final int SERVER_PORT = 8990;
@@ -103,6 +103,17 @@ public class ClientController {
                 System.out.println("EMAIL INIT"+emailInit);
                 out.writeObject(emailInit);
                 alertNewMail(socket);
+                offline=false;
+                Platform.runLater(() -> {
+                    // model.refreshEmail();
+                    // model.loadToInbox();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                    alert.setHeaderText("SERVER ONLINE");
+                    // alert.setContentText("I have a great message for you!");
+                    alert.show();
+                });
                 //tryToReconnect=false;
                 //out.close();
             }
@@ -110,7 +121,22 @@ public class ClientController {
         } catch (UnknownHostException e) {
             //logger.error(e, e);
         } catch (IOException e) {
-            System.err.println("SERVER OFFLINE");        }
+
+            System.err.println("SERVER OFFLINE");
+            if (!offline) {
+                Platform.runLater(() -> {
+                    // model.refreshEmail();
+                    // model.loadToInbox();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                    alert.setHeaderText("SERVER OFFLINE");
+                    // alert.setContentText("I have a great message for you!");
+                    alert.show();
+                });
+            }
+            offline=true;
+        }
     }
     @FXML
     public void initialize(Client client) throws IOException {
@@ -145,7 +171,7 @@ public class ClientController {
                         } catch (InterruptedException e) {
                             // You may or may not want to stop the thread here
                             // tryToReconnect = false;
-                            System.err.println("SERVER OFFLINE 1");
+                            //System.err.println("SERVER OFFLINE 1");
                             /*if(socket.isClosed()) {
                                 connect();
                             }*/
@@ -478,4 +504,6 @@ public class ClientController {
         }
         return correct;
     }
+
 }
+

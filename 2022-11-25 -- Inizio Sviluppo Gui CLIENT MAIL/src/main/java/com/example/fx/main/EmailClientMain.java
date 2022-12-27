@@ -3,10 +3,13 @@ package com.example.fx.main;
 import com.example.fx.model.Client;
 import com.example.fx.ui.ClientController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -41,7 +44,17 @@ public class EmailClientMain extends Application {
 
             controllers.get(i).initialize(clients.get(i));
             stages.get(i).show();
+
         }
+
+        stages.get(0).setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
 
 
 

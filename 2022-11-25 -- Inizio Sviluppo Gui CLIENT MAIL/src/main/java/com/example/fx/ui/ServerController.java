@@ -199,7 +199,7 @@ public class ServerController  {
                             // outMsg.flush();
                             outMsg.writeObject(new Email(null,"", List.of(""), "", ""));
                         }
-                            logArea.appendText(email.getSender() + " Mail di destinazione errata\n");
+                            logArea.appendText(email.getSender() +" invia mail a:"+email.getReceivers()+ " Mail di destinazione non esistente\n");
                     }
 
                     System.out.println("CALL TASK FINE ESECUZIONE");
@@ -226,7 +226,7 @@ public class ServerController  {
             i++;
         }
 
-        /*if(!correct){
+        if(!correct){
             Platform.runLater(() -> {
                 // model.refreshEmail();
                 // model.loadToInbox();
@@ -236,7 +236,7 @@ public class ServerController  {
                 // alert.setContentText("I have a great message for you!");
                 alert.show();
             });
-        }*/
+        }
 
 
         return correct;
