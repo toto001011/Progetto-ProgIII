@@ -69,29 +69,12 @@ public class ClientController {
     private Client model;
     private Email selectedEmail;
     private Email emptyEmail;
-    private FloatProperty inboxDim;
-    private Client client;
     private Socket socket;
 
-    //AtomicLong idNewEmail=new AtomicLong();
-    //private  ObservableList<File> inboxCsv;
     private boolean tryToReconnect=true;
-
     private boolean offline=false;
-
-
     private static final int SERVER_PORT = 8990;
 
-
-    //private static  File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+"txt");
-   /* private void socketConnect(Socket s)  {
-        try {
-            s=new Socket("localhost",SERVER_PORT );
-        } catch (IOException  e) {
-            System.err.println("CONNESSIONE AL SERVER NON RIUSCITA");
-
-         }
-    }*/
 
     private void connect(){
         try {
@@ -105,33 +88,25 @@ public class ClientController {
                 alertNewMail(socket);
                 offline=false;
                 Platform.runLater(() -> {
-                    // model.refreshEmail();
-                    // model.loadToInbox();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
                     alert.setHeaderText("SERVER ONLINE");
-                    // alert.setContentText("I have a great message for you!");
                     alert.show();
                 });
-                //tryToReconnect=false;
-                //out.close();
+
             }
 
         } catch (UnknownHostException e) {
-            //logger.error(e, e);
         } catch (IOException e) {
 
-            System.err.println("SERVER OFFLINE");
+            //System.err.println("SERVER OFFLINE");
             if (!offline) {
                 Platform.runLater(() -> {
-                    // model.refreshEmail();
-                    // model.loadToInbox();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
                     alert.setHeaderText("SERVER OFFLINE");
-                    // alert.setContentText("I have a great message for you!");
                     alert.show();
                 });
             }
@@ -145,11 +120,6 @@ public class ClientController {
         if (this.model != null)
             throw new IllegalStateException("Model can only be initialized once");
 
-        //socket = new Socket("localhost",SERVER_PORT );
-
-        //socketConnect(socket);
-
-           // connect();
 
             Thread heartbeatThread = new Thread() {
                 public void run() {
@@ -162,25 +132,16 @@ public class ClientController {
                            if(socket!=null) {
                                ObjectOutputStream outRetry = new ObjectOutputStream(socket.getOutputStream());
                                outRetry.writeObject(new Email("-1","", List.of(""), "", ""));
-//                               // outRetry.close();
-                               //OutputStream outRetry =socket.getOutputStream();
-                               //outRetry.write(1600);
+
 
                            }
                                 sleep(5000);
                         } catch (InterruptedException e) {
-                            // You may or may not want to stop the thread here
-                            // tryToReconnect = false;
-                            //System.err.println("SERVER OFFLINE 1");
-                            /*if(socket.isClosed()) {
-                                connect();
-                            }*/
+
                         }catch (IOException e) {
-                           System.err.println("SERVER OFFLINE 2");
+                           //tr to reconnect to server
                            connect();
-                           //throw new RuntimeException(e);
                        }
-                        //outRetry.close();
                     }
                 };
             };
@@ -197,17 +158,13 @@ public class ClientController {
         model.loadEmail();
 
         selectedEmail = null;
-        //System.out.println("LIST EMAIL"+lstEmails);
         //binding tra lstEmails e inboxProperty
         lstEmails.itemsProperty().bind(model.inboxProperty());
         lstEmails.setOnMouseClicked(this::showSelectedEmail);
         lblUsername.textProperty().bind(model.emailAddressProperty());
         lblUsernameSend.textProperty().bind(model.emailAddressProperty());
-
         emptyEmail = new Email(null,"", List.of(""), "", "");
 
-        // this.onSendButtonClick()
-        //  listenInbox();
     }
 
     /**
@@ -216,7 +173,6 @@ public class ClientController {
     @FXML
     protected void onDeleteButtonClick() {
         model.deleteEmail(selectedEmail);
-        //File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
 
         updateDetailView(emptyEmail);
     }
@@ -308,7 +264,6 @@ public class ClientController {
 
     protected Email newMail(){
         String idNewEmail = UUID.randomUUID().toString();
-        //String sender= String.valueOf(lblUsernameSend);//"sender";
         String sender=lblUsernameSend.textProperty().getValue();
         txtSendTo.textProperty().getValue();
         List<String> receivers;
@@ -317,17 +272,14 @@ public class ClientController {
         String subject=txtSendObj.textProperty().getValue();
 
         String text=txtEmailContentSend.textProperty().getValue();
-        //model.sendSocket( new Email(id, sender,  receivers,  subject,  text));
         Email emailsend = new Email(idNewEmail, sender,  receivers,  subject,  text);
-        //System.out.println("EMAIL CLIENT CONTROLLER-->"+idNewEmail+emailsend+"-- "+emailsend.getReceivers()+"-- "+emailsend.getText());
-        // idNewEmail.getAndIncrement();
+
 
         return emailsend;
     }
     public static List<String> loadReceiver(String receivers){
 
         ArrayList<String> rec= new ArrayList<>();
-        //System.out.println("RECeivers"+receivers);
 
         String[] rvalue = receivers.split(",");
 
@@ -335,38 +287,20 @@ public class ClientController {
             rec.add(rsplit);
 
         }
-        //  System.out.println("REC"+rec);
         return rec;
 
     }
     @FXML
     protected void onSendButtonClick() throws IOException {
-        // File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+model.emailAddressProperty().getValue()+".txt");
         Email emailToSend=newMail();
 
-        System.out.println(" PREPARAZIONE INVIO OGGETTO AL SERVER");
+        //System.out.println(" PREPARAZIONE INVIO OGGETTO AL SERVER");
         //definisco l'imput stream del socket client
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         if(ExistEmail(emailToSend.getReceivers())) {
             out.writeObject(emailToSend);
-            // out.flush();
-        }/*else{
-            Platform.runLater(() -> {
-                // model.refreshEmail();
-                // model.loadToInbox();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText("ATTENZION MAIL NON CORRETTA");
-                // alert.setContentText("I have a great message for you!");
-                alert.show();
-            });
-        }*/
-
-
-        //OSS email composta perche lo necessitava il metodo del model, innrealta per adesso mando una stringa
-        //inboxDim.setValue(Files.size(emails.toPath()));
-        //System.out.println("PROPERTIES-->"+inboxDim);
-        System.out.println("OGGETTO INVIATO AL SERVER");
+        }
+       // System.out.println("OGGETTO INVIATO AL SERVER");
 
     }
 
@@ -426,16 +360,6 @@ public class ClientController {
     }
 
 
-/*    public void listenInbox(){
-        inboxDim.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                System.out.println("NEW MESSAGES"+t1);
-                model.refreshEmail();
-            }
-        });
-
-}*/
 
 
     /**
@@ -493,12 +417,9 @@ public class ClientController {
         }
         if(!correct){
             Platform.runLater(() -> {
-                // model.refreshEmail();
-                // model.loadToInbox();
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("ATTENZION MAIL NON CORRETTA");
-                // alert.setContentText("I have a great message for you!");
                 alert.show();
             });
         }

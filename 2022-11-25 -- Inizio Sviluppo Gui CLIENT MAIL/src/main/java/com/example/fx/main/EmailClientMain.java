@@ -46,7 +46,7 @@ public class EmailClientMain extends Application {
             stages.get(i).show();
 
         }
-
+        //Serve per far terminare il processo alla chiusura della finestra
         stages.get(0).setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {

@@ -51,7 +51,6 @@ public class ServerController  {
                 int i=0;
                 while (true) {
 
-                    System.out.println("THREAD INITIALIZE -- I:"+i);
                     incomes.add(s.accept());
 
                     ServerTasks incomeTask=new ServerTasks(incomes.get(i));
@@ -62,42 +61,12 @@ public class ServerController  {
                     tasks.add(ft);
                     exec.execute(ft);
                     i++;
-                    System.out.println("THREAD FINISH --I:"+i+"ID STUDENTE O-->"+socketToId.get("studente.0@edu.it")+"\n");
                 }
 
             }
         };
         new Thread(task).start();
-
-
-
-
-
     }
-
-
-
-
-    /*public void initilizeServer(Socket income) throws IOException {
-
-        ServerTasks incomeTask=new ServerTasks(income);
-
-        ExecutorService exec = Executors.newFixedThreadPool(NUM_THREADS);
-
-        Vector<FutureTask<Socket>> tasks = new Vector<>();
-
-
-            FutureTask<Socket> ft = new FutureTask<>(incomeTask);
-            tasks.add(ft);
-            exec.execute(ft);
-
-
-
-
-
-
-    }*/
-
 
 
     public class ServerTasks implements Callable<Socket> {
@@ -122,16 +91,6 @@ public class ServerController  {
                 System.out.println("    STREAM CREATO");
 
 
-                   //Scanner in = new Scanner(inStream);
-                //Outputstream per avvisare il client della mail che è stata ricevuta
-                // ObjectOutputStream outStream = new ObjectOutputStream(income.getOutputStream());
-
-
-
-
-
-
-
                 Email email = (Email) inStream.readObject();
                 socketToId.put(email.getSender(), income);
                 System.out.println("EMAIL RECEIVED "+email.getSender());
@@ -139,25 +98,9 @@ public class ServerController  {
 
 
 
-                //InputStream inStream = income.getInputStream();
 
                 if(email.getId()==null || email.getId().compareTo("-1")==0) {
-                    System.out.println("Finestra TASK ");
                     continue;
-                   /* PrintWriter  out = new PrintWriter(
-                            new BufferedWriter(
-                                    new OutputStreamWriter(
-                                            socketToId.get(email.getReceivers().get(0)).getOutputStream())),
-                            true);;
-                    System.out.println("CALL SERVER TASK SOCKET-->" + socketToId.get(email.getSender()));
-
-
-
-                    out.println("INIT MESSAGE RECEIVED");*/
-                    // outInit.println("INIT MESSAGE RECEIVED");
-
-                   // out.flush();
-                    //outInit.close();
                 }
 
 
@@ -165,7 +108,7 @@ public class ServerController  {
 
                 //System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
                 if (ExistEmail(email.getReceivers()) && email.getId()!=null  && email.getId().compareTo("-1")!=0)  {
-                    System.out.println("-----EMAIL TO SEND-----");
+                  //  System.out.println("-----EMAIL TO SEND-----");
 
 
                     /*Mail CORRETTA pronta per l'invio*/
@@ -174,17 +117,9 @@ public class ServerController  {
 
                     int i = 0;
                     while (i < email.getReceivers().size()) {
-                        System.out.println("OUTPUT STREAM SERVER TO->" + email.getReceivers().get(i));
-
 
                         ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getReceivers().get(i)).getOutputStream());
-                        System.out.println("OUTPUT STREAM SERVER CREATED");
-
-                        // outMsg.println("NUOVO MESSAGGIO");
-                        // outMsg.flush();
                         outMsg.writeObject(email);
-
-                        // outStream.writeObject(model);
                         i++;
 
                     }
@@ -193,16 +128,12 @@ public class ServerController  {
                         if (email.getId() != null) {
                             //Mando l'avviso al Cient che la mail non esiste
                             ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getSender()).getOutputStream());
-                            System.out.println("OUTPUT STREAM SERVER CREATED");
-
-                            // outMsg.println("NUOVO MESSAGGIO");
-                            // outMsg.flush();
                             outMsg.writeObject(new Email(null,"", List.of(""), "", ""));
                         }
                             logArea.appendText(email.getSender() +" invia mail a:"+email.getReceivers()+ " Mail di destinazione non esistente\n");
                     }
 
-                    System.out.println("CALL TASK FINE ESECUZIONE");
+                   // System.out.println("CALL TASK FINE ESECUZIONE");
 
 
             }
@@ -216,7 +147,6 @@ public class ServerController  {
 
     public boolean ExistEmail(List<String> socketMailTo){
         int i=0;
-        //socketToId.get(socketMailTo.get(i));
         boolean correct=true;
         while (i<socketMailTo.size() && correct){
             System.out.println(socketMailTo.get(i));
@@ -228,12 +158,9 @@ public class ServerController  {
 
         if(!correct){
             Platform.runLater(() -> {
-                // model.refreshEmail();
-                // model.loadToInbox();
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("ATTENZIONE MAIL NON ESISTENTE");
-                // alert.setContentText("I have a great message for you!");
                 alert.show();
             });
         }
@@ -242,25 +169,5 @@ public class ServerController  {
         return correct;
 
     }
-/*
-    public String getSocketEmail(Socket income) throws IOException, ClassNotFoundException {
-        System.out.println("AVVIO STREAM");
-        ObjectInputStream inStream =new ObjectInputStream(income.getInputStream());
-        System.out.println("STREAM AVVIATO");
-       Scanner in = new Scanner(inStream);
-        System.out.println("STREAM AVVIATO");
-        //Outputstream per avvisare il client della mail che è stata ricevuta
 
-
-        Email email = (Email) inStream.readObject();
-        inStream.close();
-        //System.out.println("EMAIL "+ email.getText());
-        //System.out.println("SOCKET FROM:" + email.getSender());
-        return email.getSender();
-
-    }*/
-/*
-    private numOfReceivers(Email email){
-        email.getReceivers().size();
-    }*/
 }

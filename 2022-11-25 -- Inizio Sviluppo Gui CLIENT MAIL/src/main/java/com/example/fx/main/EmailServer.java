@@ -51,6 +51,8 @@ public class EmailServer extends Application {
         stage.setTitle("Email server");
         stage.setScene(scene);
         stage.show();
+
+        //Serve per far terminare il processo alla chiusura della finestra
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
