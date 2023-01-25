@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="popUpNewMsg" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fx.ui.ClientController">
+   <center>
+      <BorderPane fx:id="serverPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <top>
+            <StackPane prefHeight="543.0" prefWidth="861.0" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="22.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NEW MESSAGGES!!!" textAlignment="CENTER">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Text>
+                        <Button layoutX="113.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#onbtnClose" prefHeight="26.0" prefWidth="74.0" text="close" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </StackPane>
+         </top>
+      </BorderPane>
+   </center>
+</BorderPane>
