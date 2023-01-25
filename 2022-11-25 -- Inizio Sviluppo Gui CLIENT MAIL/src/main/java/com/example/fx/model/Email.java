@@ -16,7 +16,6 @@ public class Email implements Serializable {
     private String text;
     private String id;
 
-    //private Email() {}
 
     /**
      * Costruttore della classe.
@@ -105,11 +104,5 @@ public class Email implements Serializable {
     }
 
 
-/*
-    public String toString() {
-        return String.join(" - ", List.of(this.sender,this.subject));
 
-        //return String.join(" - ", List.of(this.sender,this.subject,this.text));
-        //return ""+this.id+" - "+this.sender+" - "+receivers.get(0)+" - "+this.subject+" - "+this.text;
-    }*/
 }

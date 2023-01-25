@@ -80,7 +80,7 @@ public class ServerController  {
          * */
         public Socket call() throws IOException, ClassNotFoundException {
 
-            int port;//porta alla quale si connette il socket
+            //int port;//porta alla quale si connette il socket
 
 
 

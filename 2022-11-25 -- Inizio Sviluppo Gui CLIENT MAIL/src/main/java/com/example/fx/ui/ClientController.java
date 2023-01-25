@@ -19,6 +19,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+
+// Client su diversi jvm(progetti)
+//Nuova connessione = nuova richiesta= nuovo socket
+//richiesta mail passare dal server
 /**
  * Classe Controller
  */
@@ -61,11 +65,7 @@ public class ClientController {
     @FXML
     private TextArea txtSendObj;
 
-    @FXML
-    private Button close;
 
-    @FXML
-    private BorderPane popUp;
     private Client model;
     private Email selectedEmail;
     private Email emptyEmail;
@@ -175,10 +175,7 @@ public class ClientController {
 
         updateDetailView(emptyEmail);
     }
-    @FXML
-    protected void onbtnClose(){
 
-    }
     @FXML
     protected void onbtUpdateViewlButtonClick(){
 
@@ -272,7 +269,8 @@ public class ClientController {
 
         String text=txtEmailContentSend.textProperty().getValue();
         Email emailsend = new Email(idNewEmail, sender,  receivers,  subject,  text);
-
+        //connessione server
+        //output stream della socket
 
         return emailsend;
     }
@@ -295,9 +293,17 @@ public class ClientController {
 
         //System.out.println(" PREPARAZIONE INVIO OGGETTO AL SERVER");
         //definisco l'imput stream del socket client
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        if(ExistEmail(emailToSend.getReceivers())) {
-            out.writeObject(emailToSend);
+        if(socket!=null) {
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            if (ExistEmail(emailToSend.getReceivers())) {
+                out.writeObject(emailToSend);
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            //alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+            alert.setHeaderText("SERVER OFFLINE");
+            // alert.setContentText("I have a great message for you!");
+            alert.show();
         }
        // System.out.println("OGGETTO INVIATO AL SERVER");
 
