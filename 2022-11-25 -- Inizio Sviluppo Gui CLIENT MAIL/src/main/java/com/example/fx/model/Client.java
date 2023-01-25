@@ -47,7 +47,7 @@ public class Client {
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
-        this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
+       // this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
 
     }
 
@@ -82,7 +82,7 @@ public class Client {
      *
      */
 
-
+/*
     public  void loadEmail() throws IOException {
        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
         Scanner emailReader = new Scanner(emails);
@@ -104,11 +104,11 @@ public class Client {
 
         emailReader.close();
     }
+*/
 
 
 
-
-
+/*
     public  void refreshEmail(){
         inboxContent.clear();
         try {
@@ -118,7 +118,7 @@ public class Client {
         }
 
 
-    }
+    }*/
 
     /**
      *

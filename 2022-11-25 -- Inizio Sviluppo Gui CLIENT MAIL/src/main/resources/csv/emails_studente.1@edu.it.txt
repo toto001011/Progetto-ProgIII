@@ -43,3 +43,7 @@ d941f389-7840-49ec-8395-b7c4e3f469cb;studente.1@edu.it;studente.1@edu.it,student
 bcb8a2de-9603-4e7a-b569-877b82c46bb9;studente.1@edu.it;studente.1@edu.it;XASXA__5;AXsxa;
 79647f99-7d8b-40cf-9296-2dda116da245;studente.1@edu.it;studente.1@edu.it;XASXA__5;AXsxa;
 6dc2d722-beff-4e92-a959-56110c87ff43;studente.1@edu.it;studente.1@edu.it;XASXA__5;AXsxa;
+cc007ae6-febb-4d6f-8f14-c2e714c9db5e;studente.0@edu.it;studente.1@edu.it;sdf;fea;
+ceb9a285-fa8d-4aac-b219-401099ba1745;studente.1@edu.it;studente.1@edu.it;XASXA__5;AXsxa;
+17a64407-8efb-4409-b45b-b810ef8009fc;studente.1@edu.it;studente.1@edu.it;XASXA__5;AXsxa;
+79a55f44-eaa9-49ed-93d5-d3a8ea2a12e5;studente.1@edu.it;studente.1@edu.it;XASXA__5;AXsxa;

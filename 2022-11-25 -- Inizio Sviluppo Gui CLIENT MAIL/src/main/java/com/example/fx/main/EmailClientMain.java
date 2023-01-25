@@ -42,11 +42,11 @@ public class EmailClientMain extends Application {
             //fxmlLoaders.add(new FXMLLoader(clientUrl));
             fxmlLoader=new FXMLLoader(clientUrl);
             //scenes.add(new Scene(fxmlLoaders.get(i).load(), 900, 600));
-            scene=new Scene(fxmlLoader.load(),700,800);
+            scene=new Scene(fxmlLoader.load(),700,600);
             //stages.add(new Stage());
             stage=new Stage();
             //stages.get(i).setTitle("Email client"+i+"!");
-            stage.setTitle("Email client di studente.1@edu.it");
+            stage.setTitle("Email client di studente.0@edu.it");
             //stages.get(i).setScene(scenes.get(i));
             stage.setScene(scene);
 

@@ -24,3 +24,9 @@ a3edc8e0-0287-4e3c-bb94-c7e71e09dcfb;studente.1@edu.it;studente.0@edu.it;XASXA__
 9f784ec4-2dd3-4db9-9e37-34826807e38d;studente.2@edu.it;studente.0@edu.it;prova invio ;prova invio ;
 10e85b71-d5ec-43fb-a281-0e6d4f6eecef;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;
 0377bcf8-2da9-42e1-9966-fd300791c9d7;studente.1@edu.it;studente.0@edu.it;messaggio prova client progetti separati;AXsxa;
+1ce83204-5009-45e7-8535-31b9b4378bff;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;
+bc0a6238-2688-461c-99fb-4e312e4f77f4;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;
+28484293-812e-4b73-9118-8e7cafe7ab34;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;
+a6ef1b77-1ef1-4e66-a220-b23edbc2ebf9;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;
+be8963a2-2580-45cd-87a7-7cf25d0d0cd4;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;
+893cbcfe-004f-4fc2-bcf8-958d32b5b7d3;studente.1@edu.it;studente.0@edu.it;XASXA__5;AXsxa;

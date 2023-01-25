@@ -93,7 +93,14 @@ public class ServerController  {
 
                 Email email = (Email) inStream.readObject();
                 socketToId.put(email.getSender(), income);
-                System.out.println("EMAIL RECEIVED "+email.getSender());
+                System.out.println("    EMAIL RECEIVED "+email.getSender());
+                System.out.println("    INVIO INBOX A "+email.getSender());
+                ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
+
+                mailToInbox.writeObject(loadEmail(income,email));
+                System.out.println("    INBOX INVIATA A: "+email.getSender()+"  ->"+loadEmail(income,email));
+
+
 
 
 
@@ -116,14 +123,14 @@ public class ServerController  {
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
 
                     int i = 0;
-                    while (i < email.getReceivers().size()) {
+             /*       while (i < email.getReceivers().size()) {
 
-                        ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getReceivers().get(i)).getOutputStream());
+                       // ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getReceivers().get(i)).getOutputStream());
                         outMsg.writeObject(email);
                         i++;
 
-                    }
-                    model.sendMailToInbox(email);
+                    }OSS le mail nuove deve essere richiesta dal client ogi tot secondi
+                   // model.sendMailToInbox(email);*/
                     } else{
                         if (email.getId() != null) {
                             //Mando l'avviso al Cient che la mail non esiste
@@ -168,6 +175,30 @@ public class ServerController  {
 
         return correct;
 
+    }
+    public  ArrayList<Email> loadEmail(Socket income,Email inboxID) throws IOException {
+        ArrayList<Email> emailList= new ArrayList<Email>();
+        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+inboxID.getSender()+".txt");
+        Scanner emailReader = new Scanner(emails);
+
+
+        while (emailReader.hasNextLine()) {
+
+            String data = emailReader.nextLine();
+
+            String[] dataSplitten= data.split(";");
+
+            String id=dataSplitten[0];
+
+            Email email = new Email(id,
+                    dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
+
+            emailList.add(email);
+
+        }
+
+        emailReader.close();
+        return emailList;
     }
 
 }

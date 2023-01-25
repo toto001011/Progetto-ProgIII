@@ -1,6 +1,8 @@
 package com.example.fx.ui;
 import javafx.application.Platform;
 import javafx.beans.property.FloatProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -71,6 +73,8 @@ public class ClientController {
     private Email emptyEmail;
     private Socket socket;
 
+    private LinkedList<Email> emailList;
+
     private boolean tryToReconnect=true;
     private boolean offline=false;
     private static final int SERVER_PORT = 8990;
@@ -82,10 +86,16 @@ public class ClientController {
             if(socket!=null) {
               //  onSendButtonClick();
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                 Email emailInit = new Email(null, lblUsername.textProperty().getValue(), List.of(lblUsername.textProperty().getValue()), "", "");
                 System.out.println("EMAIL INIT"+emailInit);
                 out.writeObject(emailInit);
-                alertNewMail(socket);
+
+               // alertNewMail(socket);
+                System.out.println("LOAD INBOX");
+
+               loadMailSocket(socket);// non si riconnette perche si "blocca alla load"
+                System.out.println("INBOX LOADED");
                 offline=false;
                 Platform.runLater(() -> {
 
@@ -111,6 +121,10 @@ public class ClientController {
                 });
             }
             offline=true;
+       /* } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);*/
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     @FXML
@@ -121,7 +135,7 @@ public class ClientController {
             throw new IllegalStateException("Model can only be initialized once");
 
 
-            Thread heartbeatThread = new Thread() {
+            Thread heartbeatThread = new Thread() { //metodo per testare la connessione ogni tot di tempo
                 public void run() {
                     while (tryToReconnect) {
 
@@ -129,8 +143,10 @@ public class ClientController {
                             connect();
                         //send a test signal
                        try {
+
                            if(socket!=null) {
                                ObjectOutputStream outRetry = new ObjectOutputStream(socket.getOutputStream());
+
                                outRetry.writeObject(new Email("-1","", List.of(""), "", ""));
 
 
@@ -154,7 +170,8 @@ public class ClientController {
         //istanza nuovo client
         model = client;//new Client("email");
         //  model=client;
-        model.loadEmail();
+       // model.loadEmail();
+
 
         selectedEmail = null;
         //binding tra lstEmails e inboxProperty
@@ -166,6 +183,27 @@ public class ClientController {
 
     }
 
+    public void loadMailSocket(Socket s) throws IOException, ClassNotFoundException {
+        ArrayList<Email> emailsInbox;
+             System.out.println(" LOAD MAIL INBOX inizio");
+        ObservableList<Email> inboxContent = FXCollections.observableList(new LinkedList<>());
+
+        //ObjectOutputStream getInboxRequest = new ObjectOutputStream(income.getOutputStream());
+          //  Email getEmailInbox = new Email("-1", null, null, null, null);
+           // getInboxRequest.writeObject(getEmailInbox);
+        //ObjectInputStream inStream = new ObjectInputStream(s.getInputStream());
+            ObjectInputStream  getInboxResponse=new ObjectInputStream(s.getInputStream());
+        System.out.println(" LOAD MAIL INBOX object");
+        emailsInbox= (ArrayList<Email>) getInboxResponse.readObject();
+
+        for(Email email: emailsInbox)
+            inboxContent.add(email);
+
+            System.out.println("RISPOSTA--> "+emailsInbox);
+            model.inboxProperty().set(inboxContent);
+        //    model.inboxProperty().set((ObservableList<Email>) inStream.readObject());
+
+    }
     /**
      * Elimina la mail selezionata
      */
@@ -179,12 +217,14 @@ public class ClientController {
     @FXML
     protected void onbtUpdateViewlButtonClick(){
 
-        model.refreshEmail();
+       // model.refreshEmail();
         System.out.println(("MODEL EMAIL "+model.emailAddressProperty()));
         updateDetailView(emptyEmail);
 
     }
-    private void alertNewMail(Socket s){
+   /* private void alertNewMail(Socket s){
+
+       // loadMailSocket(s);
         Task alertTask = new Task<Void>() {
             @FXML
             @Override public Void call() throws IOException {
@@ -257,7 +297,7 @@ public class ClientController {
         };
         new Thread(alertTask).start();
     }
-
+*/
     protected Email newMail(){
         String idNewEmail = UUID.randomUUID().toString();
         String sender=lblUsernameSend.textProperty().getValue();
