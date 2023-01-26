@@ -34,7 +34,9 @@ public class ServerController  {
     private BorderPane serverPane;
 
     Map<String,Socket> socketToId=new HashMap<>();
+    Map<String,Email> newEmails= new HashMap<>();
 
+    private boolean inboxInit=false;
 
     @FXML
     public void initialize() throws IOException {
@@ -79,73 +81,118 @@ public class ServerController  {
          * Funzione Call() che viene chiamata dal vettore dei futureTask e specifica cosa fare
          * */
         public Socket call() throws IOException, ClassNotFoundException {
+            if(!inboxInit ) {
+                //int port;//porta alla quale si connette il socket
+                System.out.println("CALL TASK INIZIO ESECUZIONE INBOX INIT");
 
-            //int port;//porta alla quale si connette il socket
+                ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
+                System.out.println("    STREAM CREATO");
+
+                System.out.println("    EMAIL RECEIVED1 " );
+                Email email = (Email) inStream.readObject();
+                System.out.println("    EMAIL RECEIVED2 " + email.getId());
+                socketToId.put(email.getSender(), income);
+
+
+                System.out.println("    EMAIL RECEIVED3 " + email.getId());
+
+                if(email.getId()==null){
+                    System.out.println("    INVIO INBOX A " + email.getSender());
+                    ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
+                    mailToInbox.writeObject(loadEmail(email));
+                    System.out.println("    EMAIL RECEIVED " + email.getSender());
+                    System.out.println("    INBOX INVIATA A: " + email.getSender() + "  ->" +loadEmail( email));
+                    mailToInbox.close();
+                } else if (email.getId().equals("-1")) {
+                   // mailToInbox.writeObject(loadEmail(income, email));
+
+                    //mailToInbox.writeObject();
+                }
+               inboxInit=true; // se lo tolgo non va l'invio delle mail
 
 
 
-            while(income.isClosed()==false ) {
-                System.out.println("CALL TASK INIZIO ESECUZIONE");
-                System.out.println("    CREAZIONE STREAM");
+            }else {
+
+                //    while(income.isClosed()==false ) {
+                System.out.println("CALL TASK NEW INIZIO ESECUZIONE");
+                System.out.println("    CREAZIONE NEW MAIL STREAM");
                 ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
                 System.out.println("    STREAM CREATO");
 
 
                 Email email = (Email) inStream.readObject();
                 socketToId.put(email.getSender(), income);
-                System.out.println("    EMAIL RECEIVED "+email.getSender());
-                System.out.println("    INVIO INBOX A "+email.getSender());
+                System.out.println("    NEW EMAIL RECEIVED " + email.getSender());
+                System.out.println("    NEW INVIO INBOX A " + email.getSender());
                 ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
 
-                mailToInbox.writeObject(loadEmail(income,email));
-                System.out.println("    INBOX INVIATA A: "+email.getSender()+"  ->"+loadEmail(income,email));
+                //mailToInbox.writeObject(loadNewMail(email.getSender()));
+                //System.out.println("   NEW INBOX INVIATA A: " + email.getSender() + "  ->" + loadEmail(email));
 
+                /*metodo per madare le mail nuove al client*/
+                if (/*email.getId() != null ||*/ email.getId().equals("-1")) {
+                    for(String rec: email.getReceivers())
+                    //    newEmails.put(rec,email);
+                    System.out.println("NEW MAIL LOAD");
+                    Email newEmailToLoad;
+                    newEmailToLoad=newEmails.getOrDefault(email.getSender(),null);
+                    System.out.println("newEmails HASH "+newEmailToLoad);
+                    if(newEmailToLoad!=null){
+                        loadEmail(newEmailToLoad);
 
+                        System.out.println("NEW MAIL LOADED"+ newEmailToLoad.getId());
+                        newEmails.clear();
+                    }else{
+                        System.out.println("NO MAIL TO LOAD");
 
+                    }
 
-
-
-
-                if(email.getId()==null || email.getId().compareTo("-1")==0) {
-                    continue;
+                    income.close();
                 }
 
 
 
-
-                //System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
-                if (ExistEmail(email.getReceivers()) && email.getId()!=null  && email.getId().compareTo("-1")!=0)  {
-                  //  System.out.println("-----EMAIL TO SEND-----");
+                System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
+                if (ExistEmail(email.getReceivers()) && email.getId() != null && !email.getId().equals("-1")) {
+                      System.out.println("-----EMAIL TO SEND-----");
 
 
                     /*Mail CORRETTA pronta per l'invio*/
                     model = email;
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
+                 //   loadNewMail(email);
+                    for(String rec: email.getReceivers())
+                        newEmails.put(rec,email);
 
-                    int i = 0;
-             /*       while (i < email.getReceivers().size()) {
+
+
+                    //int i = 0;
+                    model.sendMailToInbox(email);
+             /*      while (i < email.getReceivers().size()) {
 
                        // ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getReceivers().get(i)).getOutputStream());
                         outMsg.writeObject(email);
                         i++;
 
                     }OSS le mail nuove deve essere richiesta dal client ogi tot secondi
-                   // model.sendMailToInbox(email);*/
-                    } else{
-                        if (email.getId() != null) {
-                            //Mando l'avviso al Cient che la mail non esiste
-                            ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getSender()).getOutputStream());
-                            outMsg.writeObject(new Email(null,"", List.of(""), "", ""));
-                        }
-                            logArea.appendText(email.getSender() +" invia mail a:"+email.getReceivers()+ " Mail di destinazione non esistente\n");
+                   // ;*/
+                } else {
+                    if (email.getId() != null) {
+                        //Mando l'avviso al Cient che la mail non esiste
+                        ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getSender()).getOutputStream());
+                        outMsg.writeObject(new Email(null, "", List.of(""), "", ""));
                     }
+                    logArea.appendText(email.getSender() + " invia mail a:" + email.getReceivers() + " Mail di destinazione non esistente\n");
+                }
 
-                   // System.out.println("CALL TASK FINE ESECUZIONE");
+                // System.out.println("CALL TASK FINE ESECUZIONE");
 
 
             }
-
-            return income;
+           // return income;
+            income.close();
+            return null;
         }
 
     }
@@ -155,14 +202,14 @@ public class ServerController  {
     public boolean ExistEmail(List<String> socketMailTo){
         int i=0;
         boolean correct=true;
-        while (i<socketMailTo.size() && correct){
+       /* while (i<socketMailTo.size() && correct){
             System.out.println(socketMailTo.get(i));
             if(socketToId.get(socketMailTo.get(i))==null){
                 correct=false;
             }
             i++;
         }
-
+*/
         if(!correct){
             Platform.runLater(() -> {
 
@@ -176,7 +223,7 @@ public class ServerController  {
         return correct;
 
     }
-    public  ArrayList<Email> loadEmail(Socket income,Email inboxID) throws IOException {
+    public  ArrayList<Email> loadEmail(Email inboxID) throws IOException {
         ArrayList<Email> emailList= new ArrayList<Email>();
         File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+inboxID.getSender()+".txt");
         Scanner emailReader = new Scanner(emails);
@@ -192,7 +239,7 @@ public class ServerController  {
 
             Email email = new Email(id,
                     dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
-
+          //  System.out.println("EMAIL LOAD EMAIL METOD:"+email);
             emailList.add(email);
 
         }
@@ -200,5 +247,17 @@ public class ServerController  {
         emailReader.close();
         return emailList;
     }
+
+
+    public /*ArrayList<Email>*/ void loadNewMail(Email email){
+        ArrayList<Email> newMail=new ArrayList<Email>();
+
+        for(String rec: email.getReceivers())
+            newEmails.put(rec,email);
+
+
+        //return newMail;
+    }
+
 
 }

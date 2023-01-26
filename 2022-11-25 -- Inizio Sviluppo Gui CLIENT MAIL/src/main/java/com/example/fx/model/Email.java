@@ -35,6 +35,7 @@ public class Email implements Serializable {
         this.text = text;
         this.receivers = new ArrayList<>(receivers);
     }
+    public Email(){}
 
     public String getSender() {
         return sender;
@@ -61,6 +62,7 @@ public class Email implements Serializable {
 
 
     public void sendMailToInbox(Email email) throws IOException {
+
         String rcvsString="";
         int i=0;
         while(i<receivers.size()-1) {
@@ -89,6 +91,7 @@ public class Email implements Serializable {
 
 
 
+
         System.out.println("EMAIL SEND");
 
 
@@ -104,5 +107,19 @@ public class Email implements Serializable {
     }
 
 
+    public boolean findInbox(String email){
+        boolean exist=false;
+        String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + email + ".txt";
+
+        File f = new File(filePath);
+
+        try {
+            exist= f.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return exist;
+    }
 
 }
