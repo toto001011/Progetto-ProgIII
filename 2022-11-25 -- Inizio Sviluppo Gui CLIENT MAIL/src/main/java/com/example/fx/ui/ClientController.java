@@ -86,12 +86,11 @@ public class ClientController {
     private void connect(){
         try {
             socket=new Socket("localhost",SERVER_PORT );
-            if(socket!=null) {
+            if(socket!=null && socket.isConnected()) {
               //  onSendButtonClick();
-                alertOnline++;
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-                if(alertOnline==0) {
+                if(alertOnline<0) {
 
                     Email emailInit = new Email(null, lblUsername.textProperty().getValue(), List.of(lblUsername.textProperty().getValue()), "", "");
                     System.out.println("REQUEST INBOX EMAIL INIT" + emailInit);
@@ -104,7 +103,9 @@ public class ClientController {
                 }
 
                // alertNewMail(socket);
-                loadMailSocket(socket);
+
+                if(loadMailSocket(socket))
+                    alertOnline++;
                 System.out.println("LOAD INBOX");
 
                 System.out.println("INBOX LOADED");
@@ -206,7 +207,7 @@ public class ClientController {
 
     }
 
-    public void loadMailSocket(Socket s) throws IOException, ClassNotFoundException {
+    public boolean loadMailSocket(Socket s) throws IOException, ClassNotFoundException {
 
         ArrayList<Email> emailsInbox;
              System.out.println(" LOAD MAIL INBOX inizio");
@@ -228,7 +229,7 @@ public class ClientController {
         });
         //    model.inboxProperty().set((ObservableList<Email>) inStream.readObject());
         //getInboxResponse.close();
-
+    return emailsInbox!=null;
     }
     /**
      * Elimina la mail selezionata

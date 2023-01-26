@@ -81,7 +81,7 @@ public class ServerController  {
          * Funzione Call() che viene chiamata dal vettore dei futureTask e specifica cosa fare
          * */
         public Socket call() throws IOException, ClassNotFoundException {
-            if(!inboxInit ) {
+           // if(!inboxInit ) {
                 //int port;//porta alla quale si connette il socket
                 System.out.println("CALL TASK INIZIO ESECUZIONE INBOX INIT");
 
@@ -89,7 +89,7 @@ public class ServerController  {
                 System.out.println("    STREAM CREATO");
 
                 System.out.println("    EMAIL RECEIVED1 " );
-                Email email = (Email) inStream.readObject();
+               Email email = (Email) inStream.readObject();
                 System.out.println("    EMAIL RECEIVED2 " + email.getId());
                 socketToId.put(email.getSender(), income);
 
@@ -104,64 +104,66 @@ public class ServerController  {
                     System.out.println("    INBOX INVIATA A: " + email.getSender() + "  ->" +loadEmail( email));
                     mailToInbox.close();
                 } else if (email.getId().equals("-1")) {
-                   // mailToInbox.writeObject(loadEmail(income, email));
+                /*    // mailToInbox.writeObject(loadEmail(income, email));
 
                     //mailToInbox.writeObject();
                 }
-               inboxInit=true; // se lo tolgo non va l'invio delle mail
+                inboxInit=true; // se lo tolgo non va l'invio delle mail
 
 
 
-            }else {
+            }else {*/
 
-                //    while(income.isClosed()==false ) {
-                System.out.println("CALL TASK NEW INIZIO ESECUZIONE");
-                System.out.println("    CREAZIONE NEW MAIL STREAM");
-                ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
-                System.out.println("    STREAM CREATO");
+                    //    while(income.isClosed()==false ) {
+                    System.out.println("CALL TASK NEW INIZIO ESECUZIONE");
+                    System.out.println("    CREAZIONE NEW MAIL STREAM");
+                    //ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
+                    System.out.println("    STREAM CREATO");
 
 
-                Email email = (Email) inStream.readObject();
-                socketToId.put(email.getSender(), income);
-                System.out.println("    NEW EMAIL RECEIVED " + email.getSender());
-                System.out.println("    NEW INVIO INBOX A " + email.getSender());
-                ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
+                    //  Email email = (Email) inStream.readObject();
+                    socketToId.put(email.getSender(), income);
+                    System.out.println("    NEW EMAIL RECEIVED " + email.getSender());
+                    System.out.println("    NEW INVIO INBOX A " + email.getSender());
 
-                //mailToInbox.writeObject(loadNewMail(email.getSender()));
-                //System.out.println("   NEW INBOX INVIATA A: " + email.getSender() + "  ->" + loadEmail(email));
+                    //mailToInbox.writeObject(loadNewMail(email.getSender()));
+                    //System.out.println("   NEW INBOX INVIATA A: " + email.getSender() + "  ->" + loadEmail(email));
 
-                /*metodo per madare le mail nuove al client*/
-                if (/*email.getId() != null ||*/ email.getId().equals("-1")) {
-                    for(String rec: email.getReceivers())
-                    //    newEmails.put(rec,email);
-                    System.out.println("NEW MAIL LOAD");
-                    Email newEmailToLoad;
-                    newEmailToLoad=newEmails.getOrDefault(email.getSender(),null);
-                    System.out.println("newEmails HASH "+newEmailToLoad);
-                    if(newEmailToLoad!=null){
-                        loadEmail(newEmailToLoad);
+                    /*metodo per madare le mail nuove al client*/
+                    if (/*email.getId() != null ||*/ email.getId().equals("-1")) {
+                        ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
 
-                        System.out.println("NEW MAIL LOADED"+ newEmailToLoad.getId());
-                        newEmails.clear();
-                    }else{
-                        System.out.println("NO MAIL TO LOAD");
+                        for (String rec : email.getReceivers())
+                            //    newEmails.put(rec,email);
+                            System.out.println("NEW MAIL LOAD");
+                        Email newEmailToLoad;
+                        newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);
+                        System.out.println("newEmails HASH " + newEmailToLoad);
+                        if (newEmailToLoad != null) {
+                            loadEmail(newEmailToLoad);
+                            mailToInbox.writeObject(loadEmail(newEmailToLoad));
+                            System.out.println("NEW MAIL LOADED" + newEmailToLoad.getId());
+                            newEmails.clear();
+                        } else {
+                            System.out.println("NO MAIL TO LOAD");
 
+                        }
+                        mailToInbox.close();
+                        income.close();
                     }
-
-                    income.close();
-                }
+                }else{
 
 
 
                 System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
                 if (ExistEmail(email.getReceivers()) && email.getId() != null && !email.getId().equals("-1")) {
-                      System.out.println("-----EMAIL TO SEND-----");
+                    System.out.println("-----EMAIL TO SEND-----");
 
 
                     /*Mail CORRETTA pronta per l'invio*/
                     model = email;
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
-                 //   loadNewMail(email);
+                    //   loadNewMail(email);
                     for(String rec: email.getReceivers())
                         newEmails.put(rec,email);
 
@@ -190,7 +192,7 @@ public class ServerController  {
 
 
             }
-           // return income;
+            // return income;
             income.close();
             return null;
         }
@@ -239,7 +241,7 @@ public class ServerController  {
 
             Email email = new Email(id,
                     dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
-          //  System.out.println("EMAIL LOAD EMAIL METOD:"+email);
+            //  System.out.println("EMAIL LOAD EMAIL METOD:"+email);
             emailList.add(email);
 
         }
