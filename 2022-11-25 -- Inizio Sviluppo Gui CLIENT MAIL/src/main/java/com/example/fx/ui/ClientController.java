@@ -89,6 +89,8 @@ public class ClientController {
             if(socket!=null && socket.isConnected()) {
               //  onSendButtonClick();
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                System.out.println("OBJECT STREAM CREATO STREAM ->"+out.toString());
+
                 //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                 if(alertOnline<0) {
 

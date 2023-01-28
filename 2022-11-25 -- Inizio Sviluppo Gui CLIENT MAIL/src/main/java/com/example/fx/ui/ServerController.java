@@ -86,22 +86,33 @@ public class ServerController  {
                 System.out.println("CALL TASK INIZIO ESECUZIONE INBOX INIT");
 
                 ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
-                System.out.println("    STREAM CREATO");
 
-                System.out.println("    EMAIL RECEIVED1 " );
-               Email email = (Email) inStream.readObject();
+            System.out.println("    STREAM CREATO"+income.toString()+"STREAM ->"+inStream.toString());
+
+             //   DataInputStream intStream =new DataInputStream(income.getInputStream());
+            //System.out.println("    STREAM INT CREATO"+income.toString()+"STREAM ->"+intStream.toString());
+
+
+            // Email email = new Email(null,"studente.2@edu.it", Collections.singletonList("studente.2@edu.it"), "", "");
+            System.out.println("    WAITING MAIL FROM CLIENT " );
+
+           Email email =(Email) inStream.readObject();
+          //  int intNum= intStream.readInt();
+            //System.out.println("INT NUMBER "+intNum);
+           // Email email=null;
                 System.out.println("    EMAIL RECEIVED2 " + email.getId());
                 socketToId.put(email.getSender(), income);
 
 
-                System.out.println("    EMAIL RECEIVED3 " + email.getId());
+
+               // System.out.println("    EMAIL RECEIVED3 " + email.getId());
 
                 if(email.getId()==null){
                     System.out.println("    INVIO INBOX A " + email.getSender());
                     ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
                     mailToInbox.writeObject(loadEmail(email));
                     System.out.println("    EMAIL RECEIVED " + email.getSender());
-                    System.out.println("    INBOX INVIATA A: " + email.getSender() + "  ->" +loadEmail( email));
+                    System.out.println("    INBOX INVIATA A: " + email.getReceivers() + "  ->" +loadEmail( email));
                     mailToInbox.close();
                 } else if (email.getId().equals("-1")) {
                 /*    // mailToInbox.writeObject(loadEmail(income, email));
@@ -133,15 +144,24 @@ public class ServerController  {
                     if (/*email.getId() != null ||*/ email.getId().equals("-1")) {
                         ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
 
-                        for (String rec : email.getReceivers())
-                            //    newEmails.put(rec,email);
-                            System.out.println("NEW MAIL LOAD");
+                        // for (String rec : email.getReceivers())
+                        // newEmails.put(rec,email);
+                        //   System.out.println("NEW MAIL LOAD"+rec);
+                        ArrayList<Email> arrayNewEmailToLoad = new ArrayList<Email>();
                         Email newEmailToLoad;
-                        newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);
-                        System.out.println("newEmails HASH " + newEmailToLoad);
+                        // if(email.getReceivers())
+                        //newEmailToLoad = newEmails.getOrDefault(email.getReceivers().get(0), null);
+                        newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);//richiesta da parte del client di nuove mail
+                        while (newEmailToLoad != null){
+                             newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);//richiesta da parte del client di nuove mail
+                             arrayNewEmailToLoad.add(newEmailToLoad);
+                             System.out.println("newEmails HASH " + newEmailToLoad);
+                        }
                         if (newEmailToLoad != null) {
-                            loadEmail(newEmailToLoad);
-                            mailToInbox.writeObject(loadEmail(newEmailToLoad));
+                            //loadEmail(newEmailToLoad);
+                            ///mailToInbox.writeObject(loadEmail(newEmailToLoad)); OSS invia tutta l'inbox ERRATO!!
+                            mailToInbox.writeObject(arrayNewEmailToLoad);
+
                             System.out.println("NEW MAIL LOADED" + newEmailToLoad.getId());
                             newEmails.clear();
                         } else {
@@ -260,6 +280,7 @@ public class ServerController  {
 
         //return newMail;
     }
+
 
 
 }
