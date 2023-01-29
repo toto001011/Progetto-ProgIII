@@ -111,7 +111,7 @@ public class ClientController {
 
                 }
 
-                // alertNewMail(socket);
+                //  alertNewMail(socket);
 
 
 
@@ -265,6 +265,17 @@ public class ClientController {
             model.inboxProperty().set(inboxContent);
         });
         System.out.println("RISPOSTA--> "+emailsInbox);
+        if(emailsInbox.size()!=0){
+            Platform.runLater(() -> {
+                // model.refreshEmail();
+                // model.loadToInbox();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                alert.setHeaderText("NUOVI MESSAGGI");
+                // alert.setContentText("I have a great message for you!");
+                alert.show();
+            });
+        }
         //    model.inboxProperty().set((ObservableList<Email>) inStream.readObject());
         //getInboxResponse.close();
         return emailsInbox!=null;
@@ -287,8 +298,8 @@ public class ClientController {
         System.out.println(("MODEL EMAIL "+model.emailAddressProperty()));
         updateDetailView(emptyEmail);
 
-    }
-    /* private void alertNewMail(Socket s){
+    }/*
+     private void alertNewMail(Socket s){
 
         // loadMailSocket(s);
          Task alertTask = new Task<Void>() {
@@ -363,7 +374,7 @@ public class ClientController {
          };
          new Thread(alertTask).start();
      }
- */
+*/
     protected Email newMail(){
         String idNewEmail = UUID.randomUUID().toString();
         String sender=lblUsernameSend.textProperty().getValue();
