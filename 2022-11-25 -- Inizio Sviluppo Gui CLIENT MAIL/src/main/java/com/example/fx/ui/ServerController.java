@@ -21,7 +21,7 @@ import java.util.concurrent.FutureTask;
  * Classe Controller
  */
 
-public class ServerController  {
+public class ServerController {
 
     private static final int NUM_THREADS = 10;
     private static final int SERVER_PORT = 8990;
@@ -204,7 +204,7 @@ public class ServerController  {
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
                     //   loadNewMail(email);
                     for(String rec: email.getReceivers()) {
- //                      // newEmails.get(rec).add(email);
+                        //                      // newEmails.get(rec).add(email);
                         sendMailToNewQueue(email);
                         System.out.println("MAIL LOAD TO HASH NEW MAIL "+newEmails);
                         // newEmails.put(rec)
@@ -325,25 +325,15 @@ public class ServerController  {
             emailReader.close();
             emails.delete();
         }
-       // return emailList;
-       // if(emailList.size()==0){
-       //     return null;
-       // }else{
-            return emailList;
-       // }
+        // return emailList;
+        // if(emailList.size()==0){
+        //     return null;
+        // }else{
+        return emailList;
+        // }
     }
 
 
-    // public /*ArrayList<Email>*/ void loadNewMail(Email email){
-     /*   ArrayList<Email> newMail=new ArrayList<Email>();
-
-        for(String rec: email.getReceivers())
-            newEmails.put(rec,email);
-
-
-        //return newMail;
-    }
-*/
 
     public void sendMailToNewQueue(Email email) throws IOException {
 

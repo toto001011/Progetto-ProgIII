@@ -110,3 +110,6 @@ a5e2d5b5-3829-49cf-927a-cd124208b5cc;studente.0@edu.it;studente.0@edu.it;PROVAA;
 1262ef7d-426a-43ad-833b-6a2ce403e285;studente.1@edu.it;studente.0@edu.it;fg ;fg ;
 6944ab02-8b32-46c2-80ce-3acf638b48f3;studente.1@edu.it;studente.0@edu.it;fg ;fg ;
 a03f7c3e-54b4-4211-ab52-ec28e6580d64;studente.1@edu.it;studente.0@edu.it;messaggio inviato dal client 1		;Questa è una PROVA!;
+aed5d46c-aff6-4b91-8f28-fbfeead8206d;studente.1@edu.it;studente.0@edu.it;Test invio da studente01;AXsxa;
+cf3d5007-be25-44d6-b971-6a59bad076e4;studente.1@edu.it;studente.1@edu.it,studente.0@edu.it;XASXA;AXsxa;
+c5492a69-8e0b-4d3c-9211-ac1e6ac9ae7a;studente.1@edu.it;studente.1@edu.it,studente.0@edu.it;prova;prova;

@@ -125,6 +125,7 @@ public class Client {
      * @return   elimina l'email specificata
      *
      */
+    /*
     public void deleteEmail(Email email) {
 
         inboxContent.remove(email);
@@ -134,6 +135,8 @@ public class Client {
             throw new RuntimeException(e);
         }
     }
+    */
+
     /**
      * Cancella la mail dal file csv Ricopiando quelle che devono rimanere in un altro file temporaneo che poi
      * viene rinominato in quello originale

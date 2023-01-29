@@ -4,11 +4,6 @@ package com.example.fx.main; /**
  modificata...
  */
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import com.example.fx.ui.ServerController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -17,10 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  This program implements a multithreaded server that listens to port 8990 and echoes back

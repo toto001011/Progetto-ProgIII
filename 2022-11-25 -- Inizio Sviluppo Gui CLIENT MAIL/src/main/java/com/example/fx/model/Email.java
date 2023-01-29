@@ -98,8 +98,6 @@ public class Email implements Serializable {
 
     }
 
-
-
     /**
      * @return      stringa composta dagli indirizzi e-mail del mittente più destinatari
      */
@@ -111,7 +109,7 @@ public class Email implements Serializable {
 
     public boolean findInbox(String email){
         boolean exist=false;
-        String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/newEmails_" + email + ".txt";
+        String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + email + ".txt";
 
         File f = new File(filePath);
 
