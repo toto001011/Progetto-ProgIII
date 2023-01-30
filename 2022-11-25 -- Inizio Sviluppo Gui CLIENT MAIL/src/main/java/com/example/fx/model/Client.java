@@ -47,7 +47,7 @@ public class Client {
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
-       // this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
+        // this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
 
     }
 
@@ -120,64 +120,6 @@ public class Client {
 
     }*/
 
-    /**
-     *
-     * @return   elimina l'email specificata
-     *
-     */
-    /*
-    public void deleteEmail(Email email) {
-
-        inboxContent.remove(email);
-        try {
-            deleteMail(email.getId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    */
-
-    /**
-     * Cancella la mail dal file csv Ricopiando quelle che devono rimanere in un altro file temporaneo che poi
-     * viene rinominato in quello originale
-     * @param idMail: indica il codice identificativo (progressivo) univoco della mail
-     *
-     */
-    public  void deleteMail(String idMail)throws IOException{
-        File tempEmails = new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/Tempemails.txt");
-        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
-
-        BufferedReader emailReader = new BufferedReader(new FileReader(emails));
-        BufferedWriter emailWriter=new BufferedWriter(new FileWriter(tempEmails));
-
-        String data;
-
-        boolean trovato=false;
-        while ( ((data=emailReader.readLine() )!=null)  ) {
-
-            String[] dataSplitten= data.split(";");
-            String id=dataSplitten[0];
-            System.out.println("ID"+id);
-            if(id.compareTo(idMail)==0 ){
-                trovato=true;
-
-            }else{
-                emailWriter.write(data );
-                emailWriter.newLine();
-                System.out.println("EMAIL COPIED");
-            }
-
-
-
-        }
-        emailReader.close();
-        emailWriter.close();
-        emails.delete();
-        boolean successful = tempEmails.renameTo(emails);
-
-
-
-    }
 
 
 

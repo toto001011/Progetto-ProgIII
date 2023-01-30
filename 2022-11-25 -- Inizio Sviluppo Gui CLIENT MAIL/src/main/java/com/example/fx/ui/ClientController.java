@@ -100,7 +100,8 @@ public class ClientController {
                         alert.setTitle(lblUsername.textProperty().getValue() + "Inb ox");
                         alert.setHeaderText("SERVER OFFLINE");
                         alert.show();
-                        alertOnline=0;
+                        if(alertOnline>=0)
+                            alertOnline=0;
                     });
                 }
                 offline=true;
@@ -635,4 +636,3 @@ public class ClientController {
     }
 
 }
-
