@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -49,6 +50,7 @@ public class EmailClientMain extends Application {
             stage.setTitle("Email client di studente.0@edu.it");
             //stages.get(i).setScene(scenes.get(i));
             stage.setScene(scene);
+            //ImageView img=new ImageView("C:/users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/com/example/fx/main/images/account_image.png");
 
 
             //controllers.add(fxmlLoaders.get(i).getController());

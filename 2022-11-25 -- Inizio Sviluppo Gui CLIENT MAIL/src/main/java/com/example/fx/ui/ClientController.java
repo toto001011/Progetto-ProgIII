@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import com.example.fx.model.Client;
 import com.example.fx.model.Email;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -693,5 +696,16 @@ public class ClientController {
 
 
     }
+
+    @FXML
+    private ImageView imgIcon;
+    @FXML
+    public void setImageURI(URI uri) {
+        imgIcon.setImage(new Image("C:/users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/com/example/fx/main/images/account_image.png"));
+    }
+
+
+
+
 
 }
