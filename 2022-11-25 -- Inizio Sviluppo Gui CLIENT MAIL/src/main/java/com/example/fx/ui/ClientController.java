@@ -307,11 +307,40 @@ public class ClientController {
      */
     @FXML
     protected void onDeleteButtonClick() {
-        deleteEmail(selectedEmail);
+
+        Socket delete=null;
+        try {
+            delete= new Socket("localhost",SERVER_PORT);
+
+
+            ObjectOutputStream emailToDelete=new ObjectOutputStream(delete.getOutputStream());
+            Email emailInit = new Email("-2", lblUsername.textProperty().getValue(), new ArrayList<>(), "", selectedEmail.getId());
+            emailToDelete.writeObject(emailInit);
+            emailToDelete.close();
+            emailToDelete.close();
+            delete.close();
+            System.out.println("RICHIESTA DI ELIMINAZIONE INVIATA AL SERVER");
+            inboxContent.remove(selectedEmail);
+
+        } catch (IOException e) {
+            Platform.runLater(() -> {
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(lblUsername.textProperty().getValue() + "Inb ox");
+                alert.setHeaderText("ATTENZIONE IL SERVER E' OFFLINE");
+                alert.setContentText("Eliminare il messaggio quando il server è online per assicurarsi che venga inviato correttamente");
+                alert.show();
+            });
+        }
+
+
+
+
 
 
         updateDetailView(emptyEmail);
     }
+
 
 
     /* private void alertNewMail(Socket s){

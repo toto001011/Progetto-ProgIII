@@ -1,16 +1,6 @@
-3023daf1-b5d9-4e81-a441-5e12eea22873;studente.0@edu.it;studente.0@edu.it;PROVAA;AXsxa;
-3023daf1-b5d9-4e81-a441-5e12eea22873;studente.0@edu.it;studente.0@edu.it;PROVAA;AXsxa;
-64ee67cc-ca3a-4c63-8a62-3433783a70e6;studente.0@edu.it;studente.0@edu.it;XASXA;AXsxa;
-01c13b20-3904-433b-a459-6a622a8a1056;studente.0@edu.it;studente.0@edu.it;XASXAvz;AXsxa;
-01c13b20-3904-433b-a459-6a622a8a1056;studente.0@edu.it;studente.0@edu.it;XASXAvz;AXsxa;
 d21748fd-9728-4cfa-8250-69501356669e;studente.1@edu.it;studente.1@edu.it,studente.0@edu.it;PROVA;PROVA;
-6d8fad43-f54f-4b60-8f71-5c47260afbce;studente.1@edu.it;studente.1@edu.it,studente.0@edu.it;PROVA INVIO MULTIPLO;PROVA;
 7c362380-4e46-4fdc-a331-c4a00c2ba68d;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
 4329dc55-2852-41e8-8d6f-3fadbe56ff37;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
 33c8dab9-1e8a-4092-bbeb-774fee4a1c0e;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
 155edf3a-8f2b-4dae-8cf2-e33acd897c1e;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
-28b0e4d1-e1c1-4950-8a64-03bee688da36;studente.0@edu.it;studente.0@edu.it;PROVAk;PROVA;
-21859f75-d7ce-40fc-8994-86e60e0979aa;studente.0@edu.it;studente.0@edu.it;PROVAk;PROVA;
-36b79132-1200-4d93-b9ab-10a057fd9c22;studente.0@edu.it;studente.0@edu.it;PROVAk;PROVA;
-f5d225e8-b6ea-4de4-9156-c55f33dff589;studente.0@edu.it;studente.0@edu.it;PROVAk;PROVA;
-e3516582-89b9-4dfb-94ba-c8de1ab18885;studente.1@edu.it;studente.0@edu.it;PROVA invio da client 1;PROVA;
+dc30c67e-b24a-47ab-aebd-f99dfac0a9b6;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;

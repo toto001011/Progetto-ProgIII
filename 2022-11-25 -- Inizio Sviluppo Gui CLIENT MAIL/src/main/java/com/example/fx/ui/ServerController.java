@@ -190,6 +190,10 @@ public class ServerController {
                     mailToInbox.close();
                     income.close();
                 }
+            }else if(email.getId().equals("-2")) {
+                    deleteMail(email);
+                    System.out.println("ELIMINO MAIL DA SERVER");
+
             }else{
 
 
@@ -209,10 +213,10 @@ public class ServerController {
                     model = email;
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
                     //   loadNewMail(email);
-                        //                      // newEmails.get(rec).add(email);
-                        sendMailToNewQueue(email);
-                        System.out.println("MAIL LOAD TO HASH NEW MAIL "+newEmails);
-                        // newEmails.put(rec)
+                    //                      // newEmails.get(rec).add(email);
+                    sendMailToNewQueue(email);
+                    System.out.println("MAIL LOAD TO HASH NEW MAIL "+newEmails);
+                    // newEmails.put(rec)
 
                     //  newEmailsArray.add(email);
 
@@ -409,6 +413,41 @@ public class ServerController {
 
 
         System.out.println("EMAIL SEND");
+
+
+
+    }
+    public  void deleteMail(Email emailToDelete)throws IOException{
+        File tempEmails = new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/Tempemails.txt");
+        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+emailToDelete.getSender()+".txt");
+
+        BufferedReader emailReader = new BufferedReader(new FileReader(emails));
+        BufferedWriter emailWriter=new BufferedWriter(new FileWriter(tempEmails));
+
+        String data;
+
+        boolean trovato=false;
+        while ( ((data=emailReader.readLine() )!=null)  ) {
+
+            String[] dataSplitten= data.split(";");
+            String id=dataSplitten[0];
+            System.out.println("ID"+id);
+            if(id.compareTo(emailToDelete.getText())==0 ){
+                System.out.println("EMAIL DELETED SOCKET "+emailToDelete);
+
+            }else{
+                emailWriter.write(data );
+                emailWriter.newLine();
+
+            }
+
+
+
+        }
+        emailReader.close();
+        emailWriter.close();
+        emails.delete();
+        boolean successful = tempEmails.renameTo(emails);
 
 
 
