@@ -194,8 +194,14 @@ public class ServerController {
 
 
 
-                System.out.println("EMAIL VALIDITY "+ ExistEmail(email.getReceivers()));
-                if (ExistEmail(email.getReceivers()) && email.getId() != null && !email.getId().equals("-1")) {
+                System.out.println("EMAIL VALIDITY "+ ExistEmail(email));
+                ObjectOutputStream mailValidity= new ObjectOutputStream(income.getOutputStream());
+                String invalidEmails=ExistEmail(email).getText();
+
+                if (invalidEmails=="" && email.getId() != null && !email.getId().equals("-1")) {
+                    Email emailValid= new Email("-3", "",new ArrayList<>(), "", invalidEmails);
+                    mailValidity.writeObject(emailValid);
+
                     System.out.println("-----EMAIL TO SEND-----");
 
 
@@ -224,6 +230,8 @@ public class ServerController {
                     }OSS le mail nuove deve essere richiesta dal client ogi tot secondi
                    // ;*/
                 } else {
+                    Email emailInvalid = new Email("-3", "",new ArrayList<>(), "", invalidEmails);
+                    mailValidity.writeObject(emailInvalid);
                     if (email.getId() != null) {
                         //Mando l'avviso al Cient che la mail non esiste
                         ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getSender()).getOutputStream());
@@ -245,30 +253,40 @@ public class ServerController {
 
 
 
-    public boolean ExistEmail(List<String> socketMailTo){
-        int i=0;
-        boolean correct=true;
-       /* while (i<socketMailTo.size() && correct){
-            System.out.println(socketMailTo.get(i));
-            if(socketToId.get(socketMailTo.get(i))==null){
-                correct=false;
+    public Email ExistEmail(Email email) {
+        //   Email emailResult=new Email();
+        String emailResult ="";
+        for (int i = 0; i < email.getReceivers().size(); i++) {
+            File inboxToSend = new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + email.getReceivers().get(i) + ".txt");
+
+            if (!inboxToSend.exists()) {
+                emailResult = emailResult + ";" + email.getReceivers().get(i);
             }
-            i++;
+
+
+
         }
-*/
-        if(!correct){
+        //emailResult.split(";");
+
+
+        return new Email("-3", "",new ArrayList<>(), "", emailResult);
+    }
+
+
+
+       /* if(!correct){
             Platform.runLater(() -> {
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("ATTENZIONE MAIL NON ESISTENTE");
                 alert.show();
             });
-        }
+        }*/
 
 
-        return correct;
+        //return correct;
 
-    }
+
     public  ArrayList<Email> loadEmail(Email inboxID) throws IOException {
         ArrayList<Email> emailList= new ArrayList<Email>();
         File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+inboxID.getSender()+".txt");

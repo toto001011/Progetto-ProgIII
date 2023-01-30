@@ -269,6 +269,7 @@ public class ClientController {
             ObjectInputStream  getInboxResponse=new ObjectInputStream(s.getInputStream());
             System.out.println(" LOAD MAIL INBOX object");
             emailsInbox= (ArrayList<Email>) getInboxResponse.readObject();
+
             Platform.runLater(() -> {
                 // model.refreshEmail();
                 // model.loadToInbox();
@@ -419,15 +420,40 @@ public class ClientController {
 
     }
     @FXML
-    protected void onSendButtonClick()  {
+    protected void onSendButtonClick() {
         Email emailToSend=newMail();
         Socket sendMail= null;
         try {
             sendMail = new Socket("localhost",SERVER_PORT );
             if (sendMail != null) {
-                ObjectOutputStream out = new ObjectOutputStream(sendMail.getOutputStream());
-                if (ExistEmail(emailToSend.getReceivers())) {
+                System.out.println("EMAIL IS CORRECT--> "+EmailIsCorrect(emailToSend.getReceivers()));
+                if (EmailIsCorrect(emailToSend.getReceivers())==true) {
+                    ObjectOutputStream out = new ObjectOutputStream(sendMail.getOutputStream());
+
                     out.writeObject(emailToSend);
+
+                    ObjectInputStream response = new ObjectInputStream(sendMail.getInputStream());
+
+                    Email emailResponse = (Email) response.readObject();
+                    if (/*emailResponse.getId()=="-3" &&*/ emailResponse.getText() == "") {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                        alert.setHeaderText("MESSAGGIO INVIATO CORRETTAMENTE");
+                        //alert.setContentText("Inviare il messaggio quando il server è online per assicurarsi che venga inviato correttamente");
+                        alert.show();
+                    } else  {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
+                        alert.setHeaderText("EMAIL " + emailResponse.getText().toUpperCase() + " NON ESISTENTE");
+                        //alert.setContentText("Inviare il messaggio quando il server è online per assicurarsi che venga inviato correttamente");
+                        alert.show();
+                    }
+
+                }else{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("ATTENZIONE EMAIL DI DESTINAZIONE NON CORRETTA");
+                    alert.show();
+
                 }
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -447,7 +473,11 @@ public class ClientController {
                 alert.setContentText("Inviare il messaggio quando il server è online per assicurarsi che venga inviato correttamente");
                 alert.show();
             });
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
+
 
         //System.out.println(" PREPARAZIONE INVIO OGGETTO AL SERVER");
         //definisco l'imput stream del socket client
@@ -559,7 +589,7 @@ public class ClientController {
         return correct;
 
     }
-    public boolean ExistEmail(List<String> socketMailTo) {
+    public boolean EmailIsCorrect(List<String> socketMailTo) {
         int i = 0;
         boolean correct = true;
         while (i < socketMailTo.size() && correct) {
@@ -569,14 +599,14 @@ public class ClientController {
             }
             i++;
         }
-        if(!correct){
+       /* if(!correct){
             Platform.runLater(() -> {
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("ATTENZION MAIL NON CORRETTA");
                 alert.show();
             });
-        }
+        }*/
         return correct;
     }
     /**
