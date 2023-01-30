@@ -220,7 +220,7 @@ public class ServerController {
                     System.out.println("MAIL LOAD TO HASH NEW MAIL1 "+newEmails);
 
                     //int i = 0;
-                    model.sendMailToInbox(email);
+                    sendMailToInbox(email);
              /*      while (i < email.getReceivers().size()) {
 
                        // ObjectOutputStream outMsg = new ObjectOutputStream(socketToId.get(email.getReceivers().get(i)).getOutputStream());
@@ -274,17 +274,6 @@ public class ServerController {
 
 
 
-       /* if(!correct){
-            Platform.runLater(() -> {
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText("ATTENZIONE MAIL NON ESISTENTE");
-                alert.show();
-            });
-        }*/
-
-
-        //return correct;
 
 
     public  ArrayList<Email> loadEmail(Email inboxID) throws IOException {
@@ -388,6 +377,43 @@ public class ServerController {
 
 
     }
+    public void sendMailToInbox(Email email) throws IOException {
+
+        String rcvsString="";
+        int i=0;
+        while(i<email.getReceivers().size()-1) {
+            rcvsString =""+rcvsString+email.getReceivers().get(i)+",";
+            i++;
+        }
+        rcvsString =""+rcvsString+email.getReceivers().get(i);
+        System.out.println("RECEIVERS"+rcvsString);
+        i=0;
+        while(i<email.getReceivers().size()) {
+            //String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt";
+            String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + email.getReceivers().get(i) + ".txt";
+            try (FileWriter fw = new FileWriter(filePath, true);
+                 BufferedWriter emailWriter = new BufferedWriter(fw);) {
+
+                System.out.println("ID:" + email.getId() + " TO:" + email.getReceivers().get(i));
+
+
+                emailWriter.append(email.getId() + ";" + email.getSender() + ";" + rcvsString + ";" + email.getSubject() + ";" + email.getText() + ";\n");
+                // emailWriter.newLine();
+
+
+            }
+            i++;
+        }
+
+
+
+
+        System.out.println("EMAIL SEND");
+
+
+
+    }
+
 
 
 }

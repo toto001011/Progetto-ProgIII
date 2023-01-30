@@ -58,46 +58,6 @@ public class Email implements Serializable {
     }
 
 
-
-
-
-    public void sendMailToInbox(Email email) throws IOException {
-
-        String rcvsString="";
-        int i=0;
-        while(i<receivers.size()-1) {
-            rcvsString =""+rcvsString+receivers.get(i)+",";
-            i++;
-        }
-        rcvsString =""+rcvsString+receivers.get(i);
-        System.out.println("RECEIVERS"+rcvsString);
-        i=0;
-        while(i<receivers.size()) {
-            //String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt";
-            String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + receivers.get(i) + ".txt";
-            try (FileWriter fw = new FileWriter(filePath, true);
-                 BufferedWriter emailWriter = new BufferedWriter(fw);) {
-
-                System.out.println("ID:" + id + " TO:" + email.receivers.get(i));
-
-
-                emailWriter.append(email.getId() + ";" + email.getSender() + ";" + rcvsString + ";" + email.getSubject() + ";" + email.getText() + ";\n");
-                // emailWriter.newLine();
-
-
-            }
-            i++;
-        }
-
-
-
-
-        System.out.println("EMAIL SEND");
-
-
-
-    }
-
     /**
      * @return      stringa composta dagli indirizzi e-mail del mittente più destinatari
      */
@@ -107,19 +67,6 @@ public class Email implements Serializable {
     }
 
 
-    public boolean findInbox(String email){
-        boolean exist=false;
-        String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_" + email + ".txt";
 
-        File f = new File(filePath);
-
-        try {
-            exist= f.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return exist;
-    }
 
 }
