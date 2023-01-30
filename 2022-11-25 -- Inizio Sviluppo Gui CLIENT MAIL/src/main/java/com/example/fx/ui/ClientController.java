@@ -100,6 +100,7 @@ public class ClientController {
                         alert.setTitle(lblUsername.textProperty().getValue() + "Inb ox");
                         alert.setHeaderText("SERVER OFFLINE");
                         alert.show();
+                        alertOnline=0;
                     });
                 }
                 offline=true;
@@ -139,7 +140,7 @@ public class ClientController {
                 System.out.println("INBOX LOADED");
                 offline=false;
 
-                if(alertOnline==0) {
+                if(alertOnline==1) {
                     Platform.runLater(() -> {
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);

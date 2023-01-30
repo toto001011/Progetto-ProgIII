@@ -1,5 +1,3 @@
 8ab608e4-7bf8-4de8-bd34-4f48fa8a7d54;studente.1@edu.it;studente.1@edu.it;PROVA;PROVA;
-d5df1f8d-d9fe-4f5e-96e5-bc0d13b477c6;studente.1@edu.it;studente.1@edu.it;PROVA;PROVA;
 e61b68a7-6e36-4bb4-97e6-7328ef566b29;studente.1@edu.it;studente.1@edu.it;PROVA;PROVA;
-4a849e5e-14f1-4eb7-aa65-b804cb907443;studente.1@edu.it;studente.1@edu.it;PROVA;PROVA;
-a3a445b2-2cdd-444f-b512-bcbd7631d323;studente.1@edu.it;studente.1@edu.it;PROVA;PROVA;
+6d8fad43-f54f-4b60-8f71-5c47260afbce;studente.1@edu.it;studente.1@edu.it,studente.0@edu.it;PROVA INVIO MULTIPLO;PROVA;

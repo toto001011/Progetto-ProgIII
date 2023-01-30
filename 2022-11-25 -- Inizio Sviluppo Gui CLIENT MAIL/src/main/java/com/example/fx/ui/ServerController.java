@@ -145,37 +145,11 @@ public class ServerController {
                 //System.out.println("   NEW INBOX INVIATA A: " + email.getSender() + "  ->" + loadEmail(email));
 
                 /*metodo per madare le mail nuove al client*/
-                if (/*email.getId() != null ||*/ email.getId().equals("-1")) {
+                if (email.getId().equals("-1")) {
                     ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
 
-                    // for (String rec : email.getReceivers())
-                    // newEmails.put(rec,email);
-                    //   System.out.println("NEW MAIL LOAD"+rec);
-                    //ArrayList<Email> arrayNewEmailToLoad = new ArrayList<Email>();
                     Email newEmailToLoad;
-                    // if(email.getReceivers())
-                    //newEmailToLoad = newEmails.getOrDefault(email.getReceivers().get(0), null);
-                    //newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);//richiesta da parte del client di nuove mail
 
-                    /*for (int i=0;i<newEmails.get(email.getSender()).size();i++){
-                        //newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);//richiesta da parte del client di nuove mail
-                        //newEmailsArray.get(i);
-                        //arrayNewEmailToLoad.add(newEmailToLoad);
-                        //  System.out.println("newEmails HASH " + newEmailsArray);
-                    }*/
-                   /* if (newEmails.get(email.getSender()).size() != 0) {
-                        //loadEmail(newEmailToLoad);
-                        ///mailToInbox.writeObject(loadEmail(newEmailToLoad)); OSS invia tutta l'inbox ERRATO!!
-                       // mailToInbox.writeObject(newEmails.get(email.getSender()));
-                        mailToInbox.writeObject(loadNewEmail(email));
-
-
-                        System.out.println("NEW MAIL LOADED" + loadNewEmail(email));
-                        newEmails.clear();
-                    } else {
-                        System.out.println("NO MAIL TO LOAD");
-
-                    }*/
                     ArrayList<Email> newMailToSend=new ArrayList<Email>();
                     System.out.println("newEmails LOADED ->"+ newMailToSend);
 
@@ -189,6 +163,9 @@ public class ServerController {
 
                     mailToInbox.close();
                     income.close();
+                }else if(email.getId().equals("-2")){
+                    deleteMail(email);
+
                 }
             }else{
 
@@ -203,13 +180,10 @@ public class ServerController {
                     model = email;
                     logArea.appendText(email.getSender() + " Invia Mai a " + email.getReceivers() + "\n");
                     //   loadNewMail(email);
-                    for(String rec: email.getReceivers()) {
+                   // for(String rec: email.getReceivers()) {
                         //                      // newEmails.get(rec).add(email);
                         sendMailToNewQueue(email);
                         System.out.println("MAIL LOAD TO HASH NEW MAIL "+newEmails);
-                        // newEmails.put(rec)
-                    }
-                    //  newEmailsArray.add(email);
 
 
                     System.out.println("MAIL LOAD TO HASH NEW MAIL1 "+newEmails);
@@ -346,8 +320,7 @@ public class ServerController {
         rcvsString =""+rcvsString+email.getReceivers().get(i);
         System.out.println("RECEIVERS"+rcvsString);
         i=0;
-        while(i<email.getReceivers().size()) {
-            //String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails.txt";
+        for(i=0;i<email.getReceivers().size()-1;i++) {
             String filePath = "C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/newEmails_" + email.getReceivers().get(i) + ".txt";
             try (FileWriter fw = new FileWriter(filePath, true);
                  BufferedWriter emailWriter = new BufferedWriter(fw);) {
@@ -360,13 +333,48 @@ public class ServerController {
 
 
             }
-            i++;
+
         }
 
 
 
 
         System.out.println("EMAIL SEND");
+
+
+
+    }
+    public  void deleteMail(Email email)throws IOException{
+        File tempEmails = new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/Tempemails.txt");
+        File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+email.getSender()+".txt");
+
+        BufferedReader emailReader = new BufferedReader(new FileReader(emails));
+        BufferedWriter emailWriter=new BufferedWriter(new FileWriter(tempEmails));
+
+        String data;
+
+        boolean trovato=false;
+        while ( ((data=emailReader.readLine() )!=null)  ) {
+
+            String[] dataSplitten= data.split(";");
+            String id=dataSplitten[0];
+            System.out.println("ID"+id);
+            if(id.compareTo(email.getText())==0 ){
+                trovato=true;
+
+            }else{
+                emailWriter.write(data );
+                emailWriter.newLine();
+                System.out.println("EMAIL COPIED");
+            }
+
+
+
+        }
+        emailReader.close();
+        emailWriter.close();
+        emails.delete();
+        boolean successful = tempEmails.renameTo(emails);
 
 
 
