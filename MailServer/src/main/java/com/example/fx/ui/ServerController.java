@@ -83,7 +83,7 @@ public class ServerController {
          * */
         public Socket call() throws IOException, ClassNotFoundException {
 
-            System.out.println("CALL TASK INIZIO ESECUZIONE INBOX INIT");
+          //  System.out.println("CALL TASK INIZIO ESECUZIONE INBOX INIT");
 
             ObjectInputStream inStream = new ObjectInputStream(income.getInputStream());
 
@@ -96,19 +96,15 @@ public class ServerController {
 
 
 
-            if(email.getId()==null){
-                System.out.println("    INVIO INBOX A " + email.getSender());
+            if(email.getId()==null){//RICHIESTA INVIO INBOX INTERA(ALL'AVVIO DEL CLIENT)
+             //   System.out.println("    INVIO INBOX A " + email.getSender());
                 ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
                 mailToInbox.writeObject(loadEmail(email));
-                System.out.println("    EMAIL RECEIVED " + email.getSender());
-                System.out.println("    INBOX INVIATA A: " + email.getReceivers() + "  ->" +loadEmail( email));
+           //    System.out.println("    EMAIL RECEIVED " + email.getSender());
+             //   System.out.println("    INBOX INVIATA A: " + email.getReceivers() + "  ->" +loadEmail( email));
                 mailToInbox.close();
             } else if (email.getId().equals("-1")) { //RICHIESTA DI AGGIORNAMENTO DI INBOX(NUOVE MAIL)
 
-
-            //    System.out.println("CALL TASK NEW INIZIO ESECUZIONE");
-           //     System.out.println("    CREAZIONE NEW MAIL STREAM");
-           //     System.out.println("    STREAM CREATO");
 
 
                 socketToId.put(email.getSender(), income);
@@ -121,7 +117,6 @@ public class ServerController {
                     ObjectOutputStream mailToInbox = new ObjectOutputStream(income.getOutputStream());
 
                     ArrayList<Email> newMailToSend=new ArrayList<Email>();
-                    System.out.println("newEmails LOADED ->"+ newMailToSend);
 
                     newMailToSend =loadNewEmail(email);
 

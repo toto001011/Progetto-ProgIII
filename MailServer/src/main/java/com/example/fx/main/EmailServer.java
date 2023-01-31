@@ -38,7 +38,7 @@ public class EmailServer extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
 
 
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 500, 400);
         stage.setTitle("Email server");
         stage.setScene(scene);
         stage.show();

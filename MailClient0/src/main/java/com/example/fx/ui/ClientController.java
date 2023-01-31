@@ -95,7 +95,7 @@ public class ClientController {
             } catch (IOException e) {
 
 
-                System.err.println("SERVER OFFLINE");
+             //   System.err.println("SERVER OFFLINE");
                 if (!offline) {
                     Platform.runLater(() -> {
 
@@ -108,40 +108,36 @@ public class ClientController {
                     });
                 }
                 offline=true;
-       /* } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);*/
+
             }
 
             if(socket!=null && socket.isConnected()) {
-                //  onSendButtonClick();
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                System.out.println("OBJECT STREAM CREATO STREAM ->"+out.toString());
+              //  System.out.println("OBJECT STREAM CREATO STREAM ->"+out.toString());
 
-                //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                 if(alertOnline<0) {
 
                     Email emailInit = new Email(null, lblUsername.textProperty().getValue(), List.of(lblUsername.textProperty().getValue()), "", "");
-                    System.out.println("REQUEST INBOX EMAIL INIT" + emailInit);
+                 //   System.out.println("REQUEST INBOX EMAIL INIT" + emailInit);
                     out.writeObject(emailInit);
                     if(loadMailSocket(socket))
                         alertOnline++;
 
                 }else{
                     Email emailInit = new Email("-1", lblUsername.textProperty().getValue(), List.of(lblUsername.textProperty().getValue()), "", "");
-                    System.out.println("REQUEST NEW MAIL" + emailInit);
+              //      System.out.println("REQUEST NEW MAIL" + emailInit);
                     out.writeObject(emailInit);
                     if(loadNewMailSocket(socket))
                         alertOnline++;
 
                 }
 
-                // alertNewMail(socket);
 
 
 
-                System.out.println("LOAD INBOX");
+           //     System.out.println("LOAD INBOX");
 
-                System.out.println("INBOX LOADED");
+            //    System.out.println("INBOX LOADED");
                 offline=false;
 
                 if(alertOnline==1) {
@@ -214,8 +210,6 @@ public class ClientController {
 
         //istanza nuovo client
         model = client;//new Client("email");
-        //  model=client;
-        // model.loadEmail();
 
 
         selectedEmail = null;
@@ -231,15 +225,13 @@ public class ClientController {
     public boolean loadMailSocket(Socket s) {
 
         ArrayList<Email> emailsInbox;
-        System.out.println(" LOAD MAIL INBOX inizio");
+      //  System.out.println(" LOAD MAIL INBOX inizio");
 
-        //ObjectOutputStream getInboxRequest = new ObjectOutputStream(income.getOutputStream());
-        //  Email getEmailInbox = new Email("-1", null, null, null, null);
-        // getInboxRequest.writeObject(getEmailInbox);
+
         ObjectInputStream  getInboxResponse= null;
         try {
             getInboxResponse = new ObjectInputStream(s.getInputStream());
-            System.out.println(" LOAD MAIL INBOX object");
+           // System.out.println(" LOAD MAIL INBOX object");
             emailsInbox= (ArrayList<Email>) getInboxResponse.readObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -251,41 +243,33 @@ public class ClientController {
         for(Email email: emailsInbox)
             inboxContent.add(email);
 
-        System.out.println("RISPOSTA--> "+emailsInbox);
         Platform.runLater(()-> {
             model.inboxProperty().set(inboxContent);
         });
-        //    model.inboxProperty().set((ObservableList<Email>) inStream.readObject());
-        //getInboxResponse.close();
+        ;
         return emailsInbox!=null;
     }
     public boolean loadNewMailSocket(Socket s)  {
 
         ArrayList<Email> emailsInbox=new ArrayList<>();
-        System.out.println(" LOAD MAIL NEW INBOX inizio");
-        //ObservableList<Email> inboxContent = FXCollections.observableList(new LinkedList<>());
+     //   System.out.println(" LOAD MAIL NEW INBOX inizio");
 
-        //ObjectOutputStream getInboxRequest = new ObjectOutputStream(income.getOutputStream());
-        //  Email getEmailInbox = new Email("-1", null, null, null, null);
-        // getInboxRequest.writeObject(getEmailInbox);
         try {
             ObjectInputStream  getInboxResponse=new ObjectInputStream(s.getInputStream());
-            System.out.println(" LOAD MAIL INBOX object");
+       //     System.out.println(" LOAD MAIL INBOX object");
             emailsInbox= (ArrayList<Email>) getInboxResponse.readObject();
 
             Platform.runLater(() -> {
-                // model.refreshEmail();
-                // model.loadToInbox();
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
                 alert.setHeaderText("HAI NUOVI MESSAGGI");
-                // alert.setContentText("I have a great message for you!");
                 alert.show();
             });
         } catch (IOException e) {
-            System.err.println("IOException in loadNewMailSocket");
+           //System.err.println("IOException in loadNewMailSocket");
         } catch (ClassNotFoundException e) {
-            System.err.println("ClassNotFoundException in loadNewMailSocket");
+           // System.err.println("ClassNotFoundException in loadNewMailSocket");
         }finally {
             ArrayList<Email> finalEmailsInbox = emailsInbox;
             Platform.runLater(()-> {
@@ -295,14 +279,12 @@ public class ClientController {
                 model.inboxProperty().set(inboxContent);
             });
 
-            System.out.println("RISPOSTA--> "+emailsInbox);
 
         }
 
 
 
-        //    model.inboxProperty().set((ObservableList<Email>) inStream.readObject());
-        //getInboxResponse.close();
+
         return emailsInbox!=null;
     }
     /**
@@ -322,7 +304,7 @@ public class ClientController {
             emailToDelete.close();
             emailToDelete.close();
             delete.close();
-            System.out.println("RICHIESTA DI ELIMINAZIONE INVIATA AL SERVER");
+            //System.out.println("RICHIESTA DI ELIMINAZIONE INVIATA AL SERVER");
             inboxContent.remove(selectedEmail);
 
         } catch (IOException e) {
@@ -346,82 +328,7 @@ public class ClientController {
 
 
 
-    /* private void alertNewMail(Socket s){
 
-        // loadMailSocket(s);
-         Task alertTask = new Task<Void>() {
-             @FXML
-             @Override public Void call() throws IOException {
-                 System.out.println("INIZIO THREAD ASCOLTO ");
-
-                 //System.out.println("    GET SCANNER"+in);
-
-
-
-                 while (true) {
-                     //ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
-                     ObjectInputStream inStream = new ObjectInputStream(s.getInputStream());
-
-                     //Serve per "leggere" i byte inviati dal server(o da altra parte)
-
-                     System.out.println("    GET INPUT STREAM "+inStream);
-
-                     System.out.println("STREAM IN ASCOLTO");
-                     Email newEmail;
-                     //while (in.hasNextLine()) {
-                     //String line = in.nextLine();
-                     //System.out.println("    "+line);
-                     //popUp newMsg= new popUp(new Stage());
-
-                     try {
-                         newEmail=(Email) inStream.readObject();
-                     } catch (ClassNotFoundException e) {
-                         throw new RuntimeException(e);
-                     }
-                     if(newEmail.getId()!=null) {
-                         //if(inStream.readObject()) {
-                         Platform.runLater(() -> {
-                             // model.refreshEmail();
-                             // model.loadToInbox();
-                             model.loadToInbox(newEmail);
-                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                             alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
-                             alert.setHeaderText("NUOVI MESSAGGI");
-                             // alert.setContentText("I have a great message for you!");
-                             alert.show();
-                         });
-                     }else{
-                         Platform.runLater(() -> {
-                             // model.refreshEmail();
-                             // model.loadToInbox();
-                             model.loadToInbox(newEmail);
-                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                             alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
-                             alert.setHeaderText("EMAIL DI DESTINAZIONE NON ESISTENTE");
-                             // alert.setContentText("I have a great message for you!");
-                             alert.show();
-                         });
-                     }
-
-
-
-
-
-                     //  }
-                     System.out.println("FINE STREAM  ASCOLTO");
-                     // inStream.close();
-
-
-
-
-                 }
-                 //  System.out.println("FINE THREAD ASCOLTO ");
-
-             }
-         };
-         new Thread(alertTask).start();
-     }
- */
     protected Email newMail(){
         String idNewEmail = UUID.randomUUID().toString();
         String sender=lblUsernameSend.textProperty().getValue();
@@ -433,8 +340,6 @@ public class ClientController {
 
         String text=txtEmailContentSend.textProperty().getValue();
         Email emailsend = new Email(idNewEmail, sender,  receivers,  subject,  text);
-        //connessione server
-        //output stream della socket
 
         return emailsend;
     }
@@ -471,13 +376,11 @@ public class ClientController {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
                         alert.setHeaderText("MESSAGGIO INVIATO CORRETTAMENTE");
-                        //alert.setContentText("Inviare il messaggio quando il server è online per assicurarsi che venga inviato correttamente");
                         alert.show();
                     } else  {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
                         alert.setHeaderText("EMAIL " + emailResponse.getText().toUpperCase() + " NON ESISTENTE");
-                        //alert.setContentText("Inviare il messaggio quando il server è online per assicurarsi che venga inviato correttamente");
                         alert.show();
                     }
 
@@ -489,9 +392,7 @@ public class ClientController {
                 }
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                //alert.setTitle(lblUsername.textProperty().getValue() + "Inbox");
                 alert.setHeaderText("SERVER OFFLINE");
-                // alert.setContentText("I have a great message for you!");
                 alert.show();
             }
             System.out.println("OGGETTO INVIATO AL SERVER");
@@ -508,11 +409,6 @@ public class ClientController {
         }catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
-
-        //System.out.println(" PREPARAZIONE INVIO OGGETTO AL SERVER");
-        //definisco l'imput stream del socket client
 
 
 
@@ -556,9 +452,6 @@ public class ClientController {
         txtEmailContent.visibleProperty().set(false);
         txtEmailContentSend.visibleProperty().set(true);
 
-
-        //lblFrom.setText(String.valueOf(lblUsername));
-
     }
     @FXML
     protected void onForwardButtonClick() {
@@ -569,8 +462,6 @@ public class ClientController {
 
         txtEmailContentSend.setText(txtEmailContent.getText());
         txtSendObj.setText(lblSubject.getText());
-
-
 
         txtSendTo.setEditable(true);
     }
@@ -615,21 +506,8 @@ public class ClientController {
             }
             i++;
         }
-       /* if(!correct){
-            Platform.runLater(() -> {
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText("ATTENZION MAIL NON CORRETTA");
-                alert.show();
-            });
-        }*/
         return correct;
     }
-    /**
-     *
-     * @return   elimina l'email specificata
-     *
-     */
 
 
 

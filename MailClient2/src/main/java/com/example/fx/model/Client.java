@@ -47,7 +47,6 @@ public class Client {
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
-        // this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
 
     }
 
@@ -75,69 +74,6 @@ public class Client {
      * @return email adress di questo particolare casella
      */
 
-
-
-    /**
-     * Carico da file csv una eventuale lista di mail
-     *
-     */
-
-/*
-    public  void loadEmail() throws IOException {
-       File emails= new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
-        Scanner emailReader = new Scanner(emails);
-
-
-        while (emailReader.hasNextLine()) {
-
-            String data = emailReader.nextLine();
-
-            String[] dataSplitten= data.split(";");
-
-            String id=dataSplitten[0];
-
-            Email email = new Email(id,
-                    dataSplitten[1], Collections.singletonList(dataSplitten[2]),dataSplitten[3],dataSplitten[4]);
-            inboxContent.add(email);
-
-        }
-
-        emailReader.close();
-    }
-*/
-
-
-
-/*
-    public  void refreshEmail(){
-        inboxContent.clear();
-        try {
-            loadEmail();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }*/
-
-
-
-
-    /**
-     *
-     * @param email
-     * @return rec
-     *
-     * Funzione che carica "individualmente i riceventi nwi socket e
-     * prende in input una lista di riceventi separati da virgola
-     * restituisce un ArrayList di riceventi
-     */
-
-
-
-    public void loadToInbox(Email email){
-        inboxContent.add(email);
-    }
 
 
 }
