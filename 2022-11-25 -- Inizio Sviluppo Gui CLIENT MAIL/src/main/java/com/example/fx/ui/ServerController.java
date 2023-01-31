@@ -153,9 +153,7 @@ public class ServerController {
                     //   System.out.println("NEW MAIL LOAD"+rec);
                     //ArrayList<Email> arrayNewEmailToLoad = new ArrayList<Email>();
                     Email newEmailToLoad;
-                    // if(email.getReceivers())
-                    //newEmailToLoad = newEmails.getOrDefault(email.getReceivers().get(0), null);
-                    //newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);//richiesta da parte del client di nuove mail
+
 
                     /*for (int i=0;i<newEmails.get(email.getSender()).size();i++){
                         //newEmailToLoad = newEmails.getOrDefault(email.getSender(), null);//richiesta da parte del client di nuove mail

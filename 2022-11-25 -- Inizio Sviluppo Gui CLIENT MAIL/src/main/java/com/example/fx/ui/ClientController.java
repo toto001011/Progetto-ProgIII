@@ -697,13 +697,6 @@ public class ClientController {
 
     }
 
-    @FXML
-    private ImageView imgIcon;
-    @FXML
-    public void setImageURI(URI uri) {
-        imgIcon.setImage(new Image("C:/users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/com/example/fx/main/images/account_image.png"));
-    }
-
 
 
 

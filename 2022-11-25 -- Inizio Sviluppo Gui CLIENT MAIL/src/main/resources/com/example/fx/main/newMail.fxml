@@ -15,7 +15,8 @@
                      <children>
                         <ImageView fx:id="imgIcon" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <!--<Image url="images/account_icon.png" />-->
+                              <Image url="@images/account_icon.png" />
+
                            </image>
                         </ImageView>
                         <Label fx:id="lblUsername" prefHeight="54.0" prefWidth="215.0" text="Label">
