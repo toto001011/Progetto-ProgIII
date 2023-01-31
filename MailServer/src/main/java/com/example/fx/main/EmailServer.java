@@ -33,7 +33,6 @@ public class EmailServer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //URL clientUrl = EmailClientMain.class.getResource("newServer.fxml");
         URL clientUrl = EmailServer.class.getResource("newServer.fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader(clientUrl);
