@@ -25,13 +25,13 @@ public class EmailClientMain extends Application {
         ClientController controller;
         URL clientUrl = EmailClientMain.class.getResource("newMail.fxml");
 
-            client=new Client("studente.0@edu.it");
+            client=new Client("studente.1@edu.it");
 
 
             fxmlLoader=new FXMLLoader(clientUrl);
             scene=new Scene(fxmlLoader.load(),700,600);
             stage=new Stage();
-            stage.setTitle("Email client di studente.0@edu.it");
+            stage.setTitle("Email client di studente.1@edu.it");
             stage.setScene(scene);
 
 

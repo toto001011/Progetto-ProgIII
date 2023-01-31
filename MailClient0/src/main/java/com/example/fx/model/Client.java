@@ -47,7 +47,6 @@ public class Client {
         this.inbox = new SimpleListProperty<>();
         this.inbox.set(inboxContent);
         this.emailAddress = new SimpleStringProperty(emailAddress);
-        // this.emails=new File("C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/2022-11-25 -- Inizio Sviluppo Gui CLIENT MAIL/src/main/resources/csv/emails_"+this.emailAddress.getValue()+".txt");
 
     }
 

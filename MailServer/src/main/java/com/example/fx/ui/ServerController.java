@@ -36,7 +36,7 @@ public class ServerController {
     Map<String,Socket> socketToId=new HashMap<>();
     Map<String,ArrayList<Email>> newEmails= new HashMap<>();
 
-    String pathServer="C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/ServerMail/";
+    String pathServer="C:/Users/asus/Desktop/UniTo/A.A. 22-23/ProgIII/Progetto ProgIII/MailServer/";
 
     private boolean inboxInit=false;
 
