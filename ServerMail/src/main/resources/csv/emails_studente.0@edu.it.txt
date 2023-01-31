@@ -1,0 +1,9 @@
+d21748fd-9728-4cfa-8250-69501356669e;studente.1@edu.it;studente.1@edu.it,studente.0@edu.it;PROVA;PROVA;
+7c362380-4e46-4fdc-a331-c4a00c2ba68d;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+4329dc55-2852-41e8-8d6f-3fadbe56ff37;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+33c8dab9-1e8a-4092-bbeb-774fee4a1c0e;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+155edf3a-8f2b-4dae-8cf2-e33acd897c1e;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+dc30c67e-b24a-47ab-aebd-f99dfac0a9b6;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+f4fc4d11-ddcd-46e9-beee-bf0ad954a56d;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+ea6dcdef-747f-4cbe-8344-9f124ab7cb44;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
+9d6763b9-5f0b-4758-a5b5-8928a4056f1b;studente.0@edu.it;studente.0@edu.it;PROVA;PROVA;
