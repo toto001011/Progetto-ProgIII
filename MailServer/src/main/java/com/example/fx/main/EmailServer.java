@@ -1,8 +1,4 @@
-package com.example.fx.main; /**
- @author Cay Horstmann
- @version 1.20 2004-08-03
- modificata...
- */
+package com.example.fx.main;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,10 +10,7 @@ import javafx.stage.WindowEvent;
 
 import java.net.URL;
 
-/**
- This program implements a multithreaded server that listens to port 8990 and echoes back
- all client input.
- */
+
 public class EmailServer extends Application {
     public static void main(String[] args ) {
         System.out.println("Finestra del server: ");
